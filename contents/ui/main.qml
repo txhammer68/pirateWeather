@@ -4,94 +4,57 @@ import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmCore
 import QtNetwork
 import org.kde.plasma.configuration
-//import org.kde.kirigami as Kirigami
+
 
 // pirate weather widget
 /// config not working, will not update after entering settings data
 
 PlasmoidItem {
     id: root
+
     signal configurationChanged
-    //width: 420 //Kirigami.Units.gridUnit * 8
-    //height: 320 // Kirigami.Units.gridUnit * 4
-    // Plasmoid.backgroundHints: PlasmaCore.Types.ShadowBackground | PlasmaCore.Types.ConfigurableBackground
-
-    //compactRepresentation: Loader {
-       // id: compactLoader
-
-        //property bool containsMouse: item?.containsMouse ?? false
-        //Layout.minimumWidth: item.Layout.minimumWidth
-       // Layout.minimumHeight: item.Layout.minimumHeight
-        //Layout.preferredWidth: item.Layout.preferredWidth
-       // Layout.preferredHeight: item.Layout.preferredHeight
-        //Layout.maximumWidth: item.Layout.maximumWidth
-        //Layout.maximumHeight: item.Layout.maximumHeight
-        //sourceComponent: isConfigured ? 'CompactRepresentation.qml' : undefined
-    //}
-
-   // fullRepresentation: Loader {
-       // id: fullRepLoader
-
-        //property bool containsMouse: item?.containsMouse ?? false
-       // Layout.minimumWidth: item.Layout.minimumWidth
-        //Layout.minimumHeight: item.Layout.minimumHeight
-        //Layout.preferredWidth: item.Layout.preferredWidth
-        //Layout.preferredHeight: item.Layout.preferredHeight
-        //Layout.maximumWidth: item.Layout.maximumWidth
-        //Layout.maximumHeight: item.Layout.maximumHeight
-        //sourceComponent: isConfigured ? 'FullRepresentation.qml' : undefined
-    //}
 
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
     //preferredRepresentation: isConstrained() ? Plasmoid.compactRepresentation : Plasmoid.fullRepresentation
 
     property bool isConfigured:false
-    readonly property string apiKey: plasmoid.configuration.apiKey
-    readonly property string measUnits: plasmoid.configuration.measUnits
-    readonly property string updateInterval: plasmoid.configuration.interval
-    readonly property string latPoint: plasmoid.configuration.latPoint
-    readonly property string lonPoint: plasmoid.configuration.lonPoint
-    //property string apiKey:"sEXf6e3tRy8Q5dcswF6SB6U7iuL1Synz80v1N0yw"
-    //property string measUnits:"us"
-    //property int updateInterval:10
-    //readonly property string latPoint: "29.668"
-    //readonly property string lonPoint: "-95.068"
-    //property string url1:"http://ip-api.com/json/?fields=lat,lon";
-    //property string url2:"https://api.pirateweather.net/forecast/"+apiKey+"/"+geoCords+"?&units="+measUnits+"&lang=en"+"&exclude=minutely,flags"
+    property string ipAddress:""
+    property string apiKey: plasmoid.configuration.apiKey
+    property string measUnits: detectSystemUnits()
+    property int updateInterval: 15
+    property string latPoint: ""
+    property string lonPoint: ""
 
-    property string url1:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+measUnits+"&lang=en"+"&exclude=minutely,flags"
+    property string url1:"https://api.ipify.org/?format=json"
+    property string url2:"http://ip-api.com/json/"+ipAddress
+    property string url3:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+measUnits+"&lang=en"+"&exclude=minutely,flags"
 
     property var weatherData:{}
     property string lastUpdate:"--"
     property bool weatherWarnings:false
     property string alertText: ""
 
+    property var iconCode:{"clear-day": '\uf00d',
+        "clear-night": '\uf02e',
+        "rain":'\uf019',
+        "snow":'\uf01b',
+        "sleet":'\uf0b5',
+        "wind":'\uf021',
+        "fog": '\uf014',
+        "cloudy":'\uf013',
+        "partly-cloudy-day":'\uf002',
+        "partly-cloudy-night":'\uf031',
+        "hail":'\uf015',
+        "thunderstorm":'\uf01e',
+        "tornado":'\uf056'}
 
-    Component.onCompleted:{
-       checkConfigured()
-        //calcLayout()
-        //isConfigured=true
+       Component.onCompleted:{
+        getData(url1)
     }
 
     onConfigurationChanged:refreshData()
-
-   // Connections {
-      //  target: Plasmoid.configuration
-     //   function onApiKeyChanged() { refreshData (); }
-     //   function onMeasUnitsChanged() { refreshData (); }
-     //   function onUpdateIntervalChanged() { refreshData (); }
-     //   function onLonPointChanged() { refreshData (); }
-    //    function onLatPointChanged() { refreshData (); }
-    //}
-
-// this should be working,more wierdness... qt/qml is full of bugs
-    onApiKeyChanged:checkConfigured ()
-    onMeasUnitsChanged:checkConfigured ()
-    onUpdateIntervalChanged:checkConfigured ()
-    onLonPointChanged:checkConfigured ()
-    onLatPointChanged:checkConfigured ()
-    //onConfigurationChanged:refreshData ()
+    onApiKeyChanged:refreshData()
 
     Plasmoid.contextualActions: [
         PlasmCore.Action {
@@ -104,13 +67,9 @@ PlasmoidItem {
         }
     ]
 
-   //WeatherData{id:wData}
-
-   function checkConfigured () {
-       if (apiKey.length > 0 && measUnits.length > 0 && updateInterval > 0 && lonPoint.length > 0 && latPoint.length > 0){
-           ConfigurationChanged()
-           getData(url1)
-       }
+   function detectSystemUnits() {
+       let measurementSystem = Qt.locale().measurementSystem
+       return measurementSystem === 0 ? "si" : "us"
    }
 
     function refreshData () {
@@ -124,29 +83,60 @@ PlasmoidItem {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    let response = xhr.responseText
-                    let data = JSON.parse(response)
-                    if (data.latitude > 0) {
-                        isConfigured=true
+                    if (url==url1) {
+                        let response = xhr.responseText
+                        let data = JSON.parse(response)
+                        processIPAddress(data)
+                    }
+                    else if (url == url2) {
+                        let response = xhr.responseText
+                        let data = JSON.parse(response)
+                        processGeoData(data)
+                      }
+                    else {
+                        let response = xhr.responseText
+                        let data = JSON.parse(response)
                         processWeatherData(data)
                       }
-                      else {
-                          isConfigured=false
-                      }
-                    }
-            }
+                }
+          }
         }
         xhr.send(); // begin the request
     }
 
+
+    function processIPAddress (data) {
+        if (typeof(data) != undefined) {
+            ipAddress=data.ip
+            if (ipAddress.length > 0) {
+                getData(url2)
+            }
+        }
+    }
+
+    function processGeoData(data) {
+        if (typeof(data) != undefined) {
+            let lat = data.lat
+            latPoint=lat
+            let lon = data.lon
+            lonPoint=lon
+            if (lonPoint.length > 0) {
+                getData(url3)
+            }}
+    }
+
     function processWeatherData (data) {
-                if (typeof(data) != undefined) {//isConfigured=true
-                    weatherData=data
-                    weatherDataChanged ()
-                    lastUpdate=Qt.formatTime(new Date(weatherData.currently.time*1000),"h:mm ap")
-                    weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
-                    alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
-                }
+        if (typeof(data) != undefined) {//isConfigured=true
+            weatherData=data
+            if (data.latitude > 0) { // check if apiKey is valid/working
+                isConfigured=true
+            }
+            else  isConfigured=false
+            weatherDataChanged ()
+            lastUpdate=Qt.formatTime(new Date(weatherData.currently.time*1000),"h:mm ap")
+            weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
+            alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
+        }
     }
 
     function degToCompass(num) {
@@ -155,39 +145,20 @@ PlasmoidItem {
         return arr[(val % 16)];
     }
 
-    //function calcLayout() {
-       // if (Plasmoid.formFactor == PlasmaCore.Types.Horizontal) {
-        //    preferredRepresentation = compactRepresentation
-       //}
-       // else if (Plasmoid.formFactor == PlasmaCore.Types.Vertical) {
-         //   preferredRepresentation = compactRepresentation
-       // }
-       // else if (Plasmoid.location == PlasmaCore.Types.Desktop) {
-          //  preferredRepresentation = fullRepresentation
-       // }
-       //else if (Plasmoid.location == PlasmaCore.Types.Floating) {
-         //   preferredRepresentation = fullRepresentation
-       // }
-   // }
-
-    //function isConstrained() {  // test for floating or panel placement of widget
-        //return (Plasmoid.formFactor == PlasmaCore.Types.Vertical || Plasmoid.formFactor == PlasmaCore.Types.Horizontal);
-   // }
-
-    Timer {                  // timer to trigger update for weather info
+    Timer {
         id: weatherTimer
         interval: updateInterval * 60 * 1000
         running: isConfigured
         repeat:  true
         triggeredOnStart:false
         onTriggered: {
-            getData(url1)
+            getData(url3)
         }
     }
 
-    Timer {       // timer to trigger update after wake from suspend mode
+    Timer {                 // timer to trigger update after wake from suspend mode
         id: suspendTimer
-        interval: 20*1000;///delay 20 secs for suspend to resume
+        interval: 20*1000;  // delay 20 secs for suspend to resume
         running: false
         repeat:  false
         onTriggered: {

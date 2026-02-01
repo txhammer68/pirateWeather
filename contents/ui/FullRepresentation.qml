@@ -25,10 +25,15 @@ Item {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             hoverEnabled:true
-            onEntered: parent.color=Theme.viewHoverColor
+            onEntered: parent.color=Theme.hoverColor
             onExited:parent.color=Theme.textColor
             onClicked:refreshData ()
         }
+    }
+    function calcConditionsText () {
+        let s1=""
+        isConfigured ? Math.round(weatherData.currently.windGust) > 0 ? s1="Real Feel: "+ Math.round(weatherData.currently.apparentTemperature)+"°    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == "si" ? " kmh" : " mph") : s1="Real Feel: "+ Math.round(weatherData.currently.apparentTemperature)+"°    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ (measUnits == "si" ? " kmh" : " mph") : s1="--"
+        return s1
     }
     Row {
         id:conditions
@@ -99,7 +104,7 @@ Item {
     }
 
     Text {
-        text:isConfigured ? "Real Feel: "+ Math.round(weatherData.currently.apparentTemperature)+"°    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == "si" ? " kmh" : " mph") : "--"
+        text:calcConditionsText ()
         Layout.fillWidth : true
         wrapMode:Text.NoWrap
         maximumLineCount: 1

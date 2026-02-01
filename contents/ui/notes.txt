@@ -1,0 +1,20 @@
+ //property string apiKey:"sEXf6e3tRy8Q5dcswF6SB6U7iuL1Synz80v1N0yw"
+
+  //function calcLayout() {
+       // if (Plasmoid.formFactor == PlasmaCore.Types.Horizontal) {
+        //    preferredRepresentation = compactRepresentation
+       //}
+       // else if (Plasmoid.formFactor == PlasmaCore.Types.Vertical) {
+         //   preferredRepresentation = compactRepresentation
+       // }
+       // else if (Plasmoid.location == PlasmaCore.Types.Desktop) {
+          //  preferredRepresentation = fullRepresentation
+       // }
+       //else if (Plasmoid.location == PlasmaCore.Types.Floating) {
+         //   preferredRepresentation = fullRepresentation
+       // }
+   // }
+
+    //function isConstrained() {  // test for floating or panel placement of widget
+        //return (Plasmoid.formFactor == PlasmaCore.Types.Vertical || Plasmoid.formFactor == PlasmaCore.Types.Horizontal);
+   // }

@@ -10,23 +10,9 @@
       <attribute name="apiKey" use="required" type="string"/>
     </entry>
   </entry>
-  <entry name="measUnits" type="StringList">
-     <label>Select Measurement Units</label>
-     <attribute name="measUnits" use="required" type="StringList"/>
-     <default>Metric,Imperial</default>
-    </entry>
   <entry name="interval" type="int">
     <label>Select Interval Time</label>
     <attribute name="interval" use="required" type="int"/>
     <default>15</default>
-  </entry>
-    <entry name="latPoint" type="string">
-      <label>Enter Latitude Geo Location</label>
-      <attribute name="latPoint" use="required" type="string"/>
-    </entry>
-    <entry name="lonPoint" type="string">
-      <label>Enter Longitude Geo Location</label>
-      <attribute name="lonPoint" use="required" type="string"/>
-    </entry>
   </group>
 </kcfg>
