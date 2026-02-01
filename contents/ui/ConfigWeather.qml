@@ -6,9 +6,6 @@ import org.kde.kirigami.platform
 Item {
     id: settingsPage
     property alias cfg_apiKey: apiNum.text
-    //property alias cfg_interval:intervalSel.value
-
-    signal configurationChanged
 
     Column {
         id:settingsInputs
@@ -58,8 +55,6 @@ Item {
                 id: apiNum
                 placeholderText: "Enter API Key"
                 placeholderTextColor:Theme.disabledTextColor
-                onAccepted: configurationChanged () //Plasmoid.configuration.writeConfig()
-                onTextChanged:configurationChanged  ()
             }
         }
     }
