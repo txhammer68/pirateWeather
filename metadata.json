@@ -1,0 +1,26 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "hammergmail.com",
+                "Name": "TxHammer"
+            }
+        ],
+        "BugReportUrl": "https://github.com/txhammer68/",
+        "Category": "Environment and Weather",
+        "Description": "Plasmoid showing weather information from Pirate Weather",
+        "FormFactors": [
+            "desktop"
+        ],
+        "Icon": "weather-clouds",
+        "Id": "com.github.txhammer68.pirateWeather",
+        "License": "GPL-2.0+",
+        "Name": "Pirate Weather",
+        "Version": "2.1",
+        "Website": "https://github.com/txhammer68/"
+    },
+    "X-Plasma-NotificationArea": "true",
+    "X-KDE-ParentApp": "org.kde.plasmashell",
+    "X-Plasma-API-Minimum-Version": "6.0"
+}

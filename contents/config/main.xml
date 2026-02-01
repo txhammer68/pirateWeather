@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name=""/>
+  <group name="Settings">
+    <entry name="apiKey" type="string">
+      <label>Enter API Key</label>
+      <attribute name="apiKey" use="required" type="string"/>
+    </entry>
+  </entry>
+  <entry name="measUnits" type="StringList">
+     <label>Select Measurement Units</label>
+     <attribute name="measUnits" use="required" type="StringList"/>
+     <default>Metric,Imperial</default>
+    </entry>
+  <entry name="interval" type="int">
+    <label>Select Interval Time</label>
+    <attribute name="interval" use="required" type="int"/>
+    <default>15</default>
+  </entry>
+    <entry name="latPoint" type="string">
+      <label>Enter Latitude Geo Location</label>
+      <attribute name="latPoint" use="required" type="string"/>
+    </entry>
+    <entry name="lonPoint" type="string">
+      <label>Enter Longitude Geo Location</label>
+      <attribute name="lonPoint" use="required" type="string"/>
+    </entry>
+  </group>
+</kcfg>
