@@ -9,6 +9,5 @@
       <label>Enter API Key</label>
       <attribute name="apiKey" use="required" type="string"/>
     </entry>
-  </entry>
   </group>
 </kcfg>
