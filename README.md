@@ -14,4 +14,5 @@ Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
 * Using IP address to get geo coordinates
 * Using system locale settings to get mesurements: Metric or Imperial
 * Click on the top right corner (last update time) to refresh data or Right Click on widget to Refresh Data
+
   Enjoy <br>
