@@ -11,9 +11,6 @@ import org.kde.plasma.configuration
 
 PlasmoidItem {
     id: root
-
-    signal configurationChanged
-
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
 
@@ -54,7 +51,6 @@ PlasmoidItem {
         getData(url1)
     }
 
-    onConfigurationChanged:refreshData()
     onApiKeyChanged:refreshData()
 
     Plasmoid.contextualActions: [
