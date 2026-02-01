@@ -1,15 +1,23 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-//import org.kde.kirigami as Kirigami
 import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
     Layout.preferredWidth: 550
-    Layout.preferredHeight: 310
+    Layout.preferredHeight: 340
     width: 550
-    height: 310
+    height: 340
+
+    Connections {
+        target: root
+        function onExpandedChanged() {
+            hourlyForecast.positionViewAtBeginning()
+            hourlyForecast.visible=true
+            dailyForecast.visible=false
+        }
+    }
 
     Text {
         text:"Last update: "+isConfigured ? lastUpdate:"NA"
@@ -30,20 +38,50 @@ Item {
             onClicked:refreshData ()
         }
     }
-    function calcConditionsText () {
+    function formatConditionsText () {
         let s1=""
-        isConfigured ? Math.round(weatherData.currently.windGust) > 0 ? s1="Real Feel: "+ Math.round(weatherData.currently.apparentTemperature)+"°    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == "si" ? " kmh" : " mph") : s1="Real Feel: "+ Math.round(weatherData.currently.apparentTemperature)+"°    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ (measUnits == "si" ? " kmh" : " mph") : s1="--"
+        let rf=""
+        let rh=""
+        let winds=""
+
+        if (isConfigured == true) {
+            rf="Real Feel: "+ Math.round(weatherData.currently.apparentTemperature)+"°"
+            rh="    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%"
+            if (weatherData.currently.windGust != undefined) {
+                if (weatherData.currently.windGust > 0) {
+                    winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == "si" ? " kmh" : " mph")
+                }
+                else winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ (measUnits == "si" ? " kmh" : " mph")
+            }
+            s1=rf+rh+winds
+        }
+        else s1="--"
         return s1
     }
-    Row {
-        id:conditions
+
+    Text {
+        id:location
         anchors.top:fullRepresentation.top
         anchors.left:fullRepresentation.left
+        anchors.topMargin:5
+        anchors.leftMargin:5
+        text:cityName + "," + regionName
+        color:Theme.textColor
+        font.pointSize:14
+        antialiasing : true
+    }
+
+    Row {
+        id:conditions
+        anchors.top:location.bottom
+        anchors.left:fullRepresentation.left
+        anchors.topMargin:5
+        anchors.leftMargin:5
         spacing:10
 
         Image {
             id:iconCode
-            source:"../icons/"+weatherData.currently.icon+".svg"
+            source:isConfigured ? "../icons/"+weatherData.currently.icon+".svg" : "../icons/na.png"
             width:48
             height:48
             smooth:true
@@ -75,8 +113,8 @@ Item {
         id:currentConds
         anchors.top:conditions.bottom
         anchors.left:conditions.left
-        anchors.leftMargin:20
-        anchors.topMargin:10
+        anchors.leftMargin:5
+        anchors.topMargin:15
         spacing:10
 
     Text {
@@ -104,7 +142,7 @@ Item {
     }
 
     Text {
-        text:calcConditionsText ()
+        text:formatConditionsText ()
         Layout.fillWidth : true
         wrapMode:Text.NoWrap
         maximumLineCount: 1
@@ -134,18 +172,58 @@ Item {
         anchors.topMargin:10
         anchors.bottomMargin:10
         anchors.horizontalCenter:ts.horizontalCenter
-        Button {
-            text: "Hourly"
-            onClicked:{
-                hourlyForecast.visible=true
-                dailyForecast.visible=false
+
+        Rectangle {
+            id:hourlyBtn
+            width:96
+            height:32
+            color:"transparent"
+            border.color:hourlyForecast.visible ? Theme.linkColor : Theme.activeBackgroundColor
+            radius:6
+
+            Text {
+                text:"Hourly"
+                color:Theme.textColor
+                anchors.centerIn:parent
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled:true
+                //onEntered: hourlyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
+                //onExited:hourlyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
+                onClicked:{
+                    hourlyForecast.visible=true
+                    dailyForecast.visible=false
+                }
             }
         }
-        Button {
-            text: "Daily"
-            onClicked: {
-                hourlyForecast.visible=false
-                dailyForecast.visible=true
+
+        Rectangle {
+            id:dailyBtn
+            width:96
+            height:32
+            color:"transparent"
+            border.color:dailyForecast.visible ? Theme.linkColor : Theme.activeBackgroundColor
+            radius:6
+
+            Text {
+                text:"Daily"
+                color:Theme.textColor
+                anchors.centerIn:parent
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled:true
+                //onEntered: dailyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
+                //onExited:dailyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
+                onClicked:{
+                    hourlyForecast.visible=false
+                    dailyForecast.visible=true
+                }
             }
         }
     }
@@ -220,7 +298,7 @@ Item {
                 id:rect1
                 implicitWidth: 4
                 radius:6
-                color:Theme.viewTextColor
+                color:Theme.textColor
                 antialiasing:true
                 smooth:true
                 opacity:scroll.active ? 1:0
