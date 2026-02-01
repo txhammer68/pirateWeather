@@ -7,17 +7,17 @@ import org.kde.plasma.configuration
 
 
 // pirate weather widget
-/// config not working, will not update after entering settings data
 
 PlasmoidItem {
     id: root
+
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
 
     property bool isConfigured:false
     property string ipAddress:""
     property string apiKey: plasmoid.configuration.apiKey
-    property string measUnits: detectSystemUnits()
+    property string measUnits:"us"
     property int updateInterval: 15
     property string latPoint: ""
     property string lonPoint: ""
@@ -48,7 +48,10 @@ PlasmoidItem {
         "tornado":'\uf056'}
 
        Component.onCompleted:{
-        getData(url1)
+           if (apiKey.length > 0) {
+            detectSystemUnits()
+            getData(url1)
+           }
     }
 
     onApiKeyChanged:refreshData()
@@ -66,17 +69,19 @@ PlasmoidItem {
 
    function detectSystemUnits() {
        let measurementSystem = Qt.locale().measurementSystem
-       return measurementSystem === 0 ? "si" : "us"
+       measurementSystem === 0 ? "si" : "us"
+       measUnits=measurementSystem
+       return null
    }
 
     function refreshData () {
         getData(url1)
-        weatherTimer.restart()
+        return null
     }
 
-    function getData(url) {  // read weather icon code from file
+    function getData(url) {
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", url,false); // set Method and File
+        xhr.open("GET", url,false);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -98,7 +103,7 @@ PlasmoidItem {
                 }
           }
         }
-        xhr.send(); // begin the request
+        xhr.send();
     }
 
     function processIPAddress (data) {
@@ -108,6 +113,7 @@ PlasmoidItem {
                 getData(url2)
             }
         }
+        return null
     }
 
     function processGeoData(data) {
@@ -123,23 +129,26 @@ PlasmoidItem {
             if (lonPoint.length > 0) {
                 getData(url3)
             }}
+        return null
     }
 
     function processWeatherData (data) {
         if (typeof(data) != undefined) {
             if (data.latitude > 0) {
-                isConfigured=true
                 weatherData=data
                 weatherDataChanged ()
                 lastUpdate=Qt.formatTime(new Date(weatherData.currently.time*1000),"h:mm ap")
                 weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
                 alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
+                isConfigured=true
+                weatherTimer.restart()
             }
             else  {
                 isConfigured=false
                 lastUpdate=="NA"
             }
         }
+       return null
     }
 
     function degToCompass(num) {
@@ -166,7 +175,6 @@ PlasmoidItem {
         repeat:  false
         onTriggered: {
             getData(url1)
-            weatherTimer.restart()
         }
     }
 
