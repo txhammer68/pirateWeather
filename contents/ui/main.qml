@@ -16,7 +16,6 @@ PlasmoidItem {
 
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
-    //preferredRepresentation: isConstrained() ? Plasmoid.compactRepresentation : Plasmoid.fullRepresentation
 
     property bool isConfigured:false
     property string ipAddress:""
@@ -25,6 +24,8 @@ PlasmoidItem {
     property int updateInterval: 15
     property string latPoint: ""
     property string lonPoint: ""
+    property string cityName:""
+    property string regionName:""
 
     property string url1:"https://api.ipify.org/?format=json"
     property string url2:"http://ip-api.com/json/"+ipAddress
@@ -83,7 +84,7 @@ PlasmoidItem {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    if (url==url1) {
+                    if (url == url1) {
                         let response = xhr.responseText
                         let data = JSON.parse(response)
                         processIPAddress(data)
@@ -104,7 +105,6 @@ PlasmoidItem {
         xhr.send(); // begin the request
     }
 
-
     function processIPAddress (data) {
         if (typeof(data) != undefined) {
             ipAddress=data.ip
@@ -120,22 +120,29 @@ PlasmoidItem {
             latPoint=lat
             let lon = data.lon
             lonPoint=lon
+            let c1=data.city
+            cityName=c1
+            let r1=data.regionName
+            regionName=r1
             if (lonPoint.length > 0) {
                 getData(url3)
             }}
     }
 
     function processWeatherData (data) {
-        if (typeof(data) != undefined) {//isConfigured=true
-            weatherData=data
-            if (data.latitude > 0) { // check if apiKey is valid/working
+        if (typeof(data) != undefined) {
+            if (data.latitude > 0) {
                 isConfigured=true
+                weatherData=data
+                weatherDataChanged ()
+                lastUpdate=Qt.formatTime(new Date(weatherData.currently.time*1000),"h:mm ap")
+                weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
+                alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
             }
-            else  isConfigured=false
-            weatherDataChanged ()
-            lastUpdate=Qt.formatTime(new Date(weatherData.currently.time*1000),"h:mm ap")
-            weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
-            alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
+            else  {
+                isConfigured=false
+                lastUpdate=="NA"
+            }
         }
     }
 
