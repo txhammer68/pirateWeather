@@ -5,7 +5,6 @@ import org.kde.plasma.core as PlasmCore
 import QtNetwork
 import org.kde.plasma.configuration
 
-
 // pirate weather widget
 
 PlasmoidItem {
@@ -75,7 +74,13 @@ PlasmoidItem {
    }
 
     function refreshData () {
-        getData(url1)
+        if (isConfigured == true) {
+            getData(url1)
+        }
+        else {
+            detectSystemUnits()
+            getData(url1)
+        }
         return null
     }
 
