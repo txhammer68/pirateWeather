@@ -12,5 +12,5 @@ Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
 * Using system locale settings to get mesurements: Metric or Imperial
 * Click on the top right corner (last update time) to refresh data or Right Click on widget to Refresh Data
 
-  Enjoy
+  Enjoy <br>
   <img alt="preview" src="preview.png" width="33%">
