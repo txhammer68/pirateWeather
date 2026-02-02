@@ -10,9 +10,7 @@ Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
 * Install widget to panel or desktop floating
 * Right click on widget to configure
 * Enter API Key
-* Widget detects ip address automatically, disable vpn on first install/use
-* Using IP address to get geo coordinates
+* Uses IP address to get geo coordinates - Disable VPN on first install/use
+* Click Get GeoCodes to get Geo Coordinates Locatiion
 * Using system locale settings to get mesurements: Metric or Imperial
 * Click on the top right corner (last update time) to refresh data or Right Click on widget to Refresh Data
-
-  Enjoy <br>
