@@ -5,10 +5,10 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth: 550
-    Layout.preferredHeight: 340
-    width: 550
-    height: 340
+    Layout.preferredWidth: 530
+    Layout.preferredHeight: 320
+    width: 530
+    height: 320
 
     Connections {
         target: root
@@ -21,7 +21,7 @@ Item {
 
     Text {
         text:"Last update: "+isConfigured ? lastUpdate:"NA"
-        color:Theme.disabledTextColor//"gray"
+        color:Theme.disabledTextColor
         antialiasing : true
         font.pointSize:10
         anchors.top:fullRepresentation.top
@@ -35,7 +35,7 @@ Item {
             hoverEnabled:true
             onEntered: parent.color=Theme.hoverColor
             onExited:parent.color=Theme.textColor
-            onClicked:refreshData ()
+            onClicked:getData(weatherURL)
         }
     }
     function formatConditionsText () {
@@ -65,7 +65,7 @@ Item {
         anchors.left:fullRepresentation.left
         anchors.topMargin:5
         anchors.leftMargin:5
-        text:cityName + "," + regionName
+        text:isConfigured ? cityName + "," + regionName : "--"
         color:Theme.textColor
         font.pointSize:14
         antialiasing : true
@@ -119,14 +119,14 @@ Item {
 
     Text {
         id:story
-        text:isConfigured ?  weatherWarnings ? alertText : weatherData.hourly.summary : "No Data, Check Settings or Network Connection"
+        text:isConfigured ?  weatherWarnings ? alertText : weatherData.hourly.summary : "No Data,Check Settings or Network Connection,Refresh Data"
         Layout.fillWidth : true
         wrapMode:Text.NoWrap
         maximumLineCount: 1
         elide: Text.ElideRight
         width:fullRepresentation.width*.95
         color:Theme.textColor
-        font.pointSize:14
+        font.pointSize:isConfigured ? 14:12
         antialiasing : true
         MouseArea {
             id: mouseArea
@@ -161,7 +161,7 @@ Item {
         width: fullRepresentation.width*.95
         anchors.horizontalCenter:fullRepresentation.horizontalCenter
         height: 1
-        color: Theme.disabledTextColor//"gray"
+        color: Theme.disabledTextColor
         antialiasing : true
     }
 
@@ -191,8 +191,6 @@ Item {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled:true
-                //onEntered: hourlyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
-                //onExited:hourlyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
                 onClicked:{
                     hourlyForecast.visible=true
                     dailyForecast.visible=false
@@ -218,8 +216,6 @@ Item {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled:true
-                //onEntered: dailyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
-                //onExited:dailyForecast.visible ? parent.border.color=Theme.hoverColor:parent.border.color=Theme.textColor
                 onClicked:{
                     hourlyForecast.visible=false
                     dailyForecast.visible=true
@@ -287,7 +283,7 @@ Item {
             id:scroll
             //policy: ScrollBar.AsNeeded
             orientation: Qt.Horizontal
-            stepSize:.025
+            stepSize:.125
             //size:.
             parent: hourlyForecast.parent
             hoverEnabled: true

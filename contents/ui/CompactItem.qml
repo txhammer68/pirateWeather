@@ -88,7 +88,7 @@ Item {
             verticalAlignment: Text.AlignVCenter
             fontSizeMode:  layoutType === 2 ? Text.FixedSize : Text.HorizontalFit
             font.family: 'weathericons'
-            text: iconCode[weatherData.currently.icon]
+            text: isConfigured ? iconCode[weatherData.currently.icon]:"?"
 
             opacity: 1
 
@@ -109,7 +109,7 @@ Item {
             horizontalAlignment: layoutType === 1 ? Text.AlignHCenter : Text.AlignRight
             verticalAlignment: layoutType === 2 ? Text.AlignBottom : Text.AlignVCenter
 
-            text: Math.round(weatherData.currently.temperature)+"° "
+            text: isConfigured ? Math.round(weatherData.currently.temperature)+"° " : "--"
             fontSizeMode:  layoutType === 2 ? Text.Fit : Text.HorizontalFit
             font.pixelSize: fontPixelSize * (layoutType === 2 ? 0.6 : .8)
             font.pointSize: -1

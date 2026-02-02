@@ -6,6 +6,7 @@ import QtNetwork
 import org.kde.plasma.configuration
 
 // pirate weather widget
+// txhammer 01/2026
 
 PlasmoidItem {
     id: root
@@ -14,18 +15,15 @@ PlasmoidItem {
     fullRepresentation:FullRepresentation { }
 
     property bool isConfigured:false
-    property string ipAddress:""
     property string apiKey: plasmoid.configuration.apiKey
-    property string measUnits:"us"
-    property int updateInterval: 15
-    property string latPoint: ""
-    property string lonPoint: ""
-    property string cityName:""
-    property string regionName:""
+    property string measUnits:detectSystemUnits()
+    property int updateInterval: plasmoid.configuration.updateInterval
+    property string latPoint: plasmoid.configuration.latCode
+    property string lonPoint: plasmoid.configuration.lonCode
+    property string cityName:plasmoid.configuration.cityName
+    property string regionName:plasmoid.configuration.regionName
 
-    property string url1:"https://api.ipify.org/?format=json"
-    property string url2:"http://ip-api.com/json/"+ipAddress
-    property string url3:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+measUnits+"&lang=en"+"&exclude=minutely,flags"
+    property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+measUnits+"&exclude=minutely,flags"
 
     property var weatherData:{}
     property string lastUpdate:"--"
@@ -48,12 +46,12 @@ PlasmoidItem {
 
        Component.onCompleted:{
            if (apiKey.length > 0) {
-            detectSystemUnits()
-            getData(url1)
+            getData(weatherURL)
            }
     }
 
-    onApiKeyChanged:refreshData()
+    onWeatherURLChanged:getData(weatherURL)
+    onUpdateIntervalChanged: weatherTimer.restart()
 
     Plasmoid.contextualActions: [
         PlasmCore.Action {
@@ -62,27 +60,16 @@ PlasmoidItem {
             priority: Plasmoid.HighPriorityAction
             visible: true
             enabled: true
-            onTriggered: refreshData()
+            onTriggered:getData(weatherURL)
         }
     ]
 
    function detectSystemUnits() {
+       let units=""
        let measurementSystem = Qt.locale().measurementSystem
-       measurementSystem === 0 ? "si" : "us"
-       measUnits=measurementSystem
-       return null
+       measurementSystem === 0 ? units="si" : units="us"
+       return units
    }
-
-    function refreshData () {
-        if (isConfigured == true) {
-            getData(url1)
-        }
-        else {
-            detectSystemUnits()
-            getData(url1)
-        }
-        return null
-    }
 
     function getData(url) {
         let xhr = new XMLHttpRequest();
@@ -90,51 +77,13 @@ PlasmoidItem {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    if (url == url1) {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
-                        processIPAddress(data)
-                    }
-                    else if (url == url2) {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
-                        processGeoData(data)
-                      }
-                    else {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
-                        processWeatherData(data)
-                      }
+                    let response = xhr.responseText
+                    let data = JSON.parse(response)
+                    processWeatherData(data)
                 }
-          }
-        }
-        xhr.send();
-    }
-
-    function processIPAddress (data) {
-        if (typeof(data) != undefined) {
-            ipAddress=data.ip
-            if (ipAddress.length > 0) {
-                getData(url2)
             }
         }
-        return null
-    }
-
-    function processGeoData(data) {
-        if (typeof(data) != undefined) {
-            let lat = data.lat
-            latPoint=lat
-            let lon = data.lon
-            lonPoint=lon
-            let c1=data.city
-            cityName=c1
-            let r1=data.regionName
-            regionName=r1
-            if (lonPoint.length > 0) {
-                getData(url3)
-            }}
-        return null
+        xhr.send();
     }
 
     function processWeatherData (data) {
@@ -169,7 +118,7 @@ PlasmoidItem {
         repeat:  true
         triggeredOnStart:false
         onTriggered: {
-            getData(url3)
+            getData(weatherURL)
         }
     }
 
@@ -179,7 +128,7 @@ PlasmoidItem {
         running: false
         repeat:  false
         onTriggered: {
-            getData(url1)
+            getData(weatherURL)
         }
     }
 
