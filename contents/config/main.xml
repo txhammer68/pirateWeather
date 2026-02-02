@@ -9,5 +9,24 @@
       <label>Enter API Key</label>
       <attribute name="apiKey" use="required" type="string"/>
     </entry>
+    <entry name="updateInterval" type="int">
+      <label>Enter Update Interval</label>
+      <attribute name="updateInterval" use="required" type="int"/>
+      <default>15</default>
+    </entry>
+    <entry name="lonCode" type="string">
+      <label>Enter Longitude Code</label>
+      <attribute name="lonCode" use="required" type="string"/>
+    </entry>
+    <entry name="latCode" type="string">
+      <label>Enter Latitude Code</label>
+      <attribute name="latCode" use="required" type="string"/>
+    </entry>
+    <entry name="cityName" type="string">
+      <attribute name="cityName" use="required" type="string"/>
+    </entry>
+    <entry name="regionName" type="string">
+      <attribute name="regionName" use="required" type="string"/>
+    </entry>
   </group>
 </kcfg>
