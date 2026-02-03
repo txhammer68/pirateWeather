@@ -9,9 +9,9 @@
       <label>Enter API Key</label>
       <attribute name="apiKey" use="required" type="string"/>
     </entry>
-    <entry name="measUnits" type="string">
+    <entry name="measUnits" type="int">
       <label>Select Measurement Units</label>
-      <attribute name="measUnits" use="required" type="string"/>
+      <attribute name="measUnits" use="required" type="int"/>
       <default></default>
     </entry>
     <entry name="updateInterval" type="int">
