@@ -7,8 +7,14 @@ Pirate Weather was developed on the closure of Dark Sky Weather providing an alt
 Sources - https://docs.pirateweather.net/en/latest/DataSources/ <br>
 Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
 
-*I nstall with ``` git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -i ./pirateWeather/```
-* Upgrade with ``` git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/```
+* Install with
+ ``` bash
+git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -i ./pirateWeather/
+```
+* Upgrade with
+``` bash
+git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/
+```
 * Install widget to panel or desktop floating
 * Right click on widget to configure
 * Enter API Key
