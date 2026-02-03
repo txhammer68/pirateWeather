@@ -23,7 +23,9 @@ PlasmoidItem {
     property string cityName:plasmoid.configuration.cityName
     property string regionName:plasmoid.configuration.regionName
 
-    property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+measUnits+"&exclude=minutely,flags"
+    property string units: measUnits == 0 ? "si":"us"
+
+    property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
 
     property var weatherData:{}
     property string lastUpdate:"--"

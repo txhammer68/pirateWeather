@@ -33,7 +33,7 @@ Item {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             hoverEnabled:true
-            onEntered: parent.color=Theme.positiveTextColor
+            onEntered: parent.color=Theme.linkColor
             onExited:parent.color=Theme.textColor
             onClicked:getData(weatherURL)
         }
@@ -49,9 +49,9 @@ Item {
             rh="    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%"
             if (weatherData.currently.windGust != undefined) {
                 if (weatherData.currently.windGust > 0) {
-                    winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == "si" ? " kmh" : " mph")
+                    winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == 0 ? " kmh" : " mph")
                 }
-                else winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ (measUnits == "si" ? " kmh" : " mph")
+                else winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ (measUnits == 0 ? " kmh" : " mph")
             }
             s1=rf+rh+winds
         }
@@ -133,7 +133,7 @@ Item {
             anchors.fill: parent
             cursorShape: weatherWarnings ? Qt.PointingHandCursor : Qt.ArrowCursor
             hoverEnabled: weatherWarnings ? true : false
-            onEntered:weatherWarnings ? parent.color=Theme.hoverColor : parent.color=Theme.textColor
+            onEntered:weatherWarnings ? parent.color=Theme.linkColor : parent.color=Theme.textColor
             onExited:weatherWarnings ? parent.color=Theme.textColor : parent.color=Theme.textColor
             onClicked: {
                 Qt.openUrlExternally(weatherData.alerts[0].uri)
