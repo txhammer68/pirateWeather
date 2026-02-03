@@ -1,14 +1,17 @@
 import QtQuick
 import QtQuick.Controls as QQC2
+import org.kde.plasma.plasmoid
 import org.kde.plasma.configuration
 import org.kde.kirigami.platform
+import org.kde.plasma.plasma5support as Plasma5Support
+
 
 Item {
     id: settingsPage
 
     property alias cfg_apiKey: apiNum.text
     property alias cfg_updateInterval: updateInterval.value
-    property string cfg_measUnits:"us"
+    property string cfg_measUnits:measSel.currentIndex
     property alias cfg_latCode: latCode.text
     property alias cfg_lonCode: lonCode.text
     property alias cfg_cityName:cityName.text
@@ -16,6 +19,17 @@ Item {
     property string ipAddress:""
     property string url1:"https://api.ipify.org/?format=json"
     property string url2:"http://ip-api.com/json/"+ipAddress
+    property string updateCMD:"git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/"
+
+    Text {
+        id:appVer
+        anchors.top:parent.top
+        anchors.right:parent.right
+        anchors.margins:10
+        text:Plasmoid.metaData.version
+        color:Theme.disabledTextColor
+        font.pointSize:9
+    }
 
     Column {
         id:settingsInputs
@@ -101,9 +115,6 @@ Item {
                 height:32
                 displayText: currentIndex < 0 ? "Select Units" : currentText
                 model: ["Metric","Imperial"]
-                onCurrentIndexChanged: {
-                        cfg_measUnits = measSel.currentIndex == 0 ? "si":"us"
-                    }
                 }
             }
 
@@ -199,6 +210,30 @@ Item {
                 anchors.bottomMargin:5
             }
         }
+
+        Rectangle {
+            id:updateWidget
+            width:120
+            height:32
+            color:"transparent"
+            border.color:apiNum.text.length > 1 ? Theme.linkColor:Theme.disabledTextColor
+            radius:6
+
+            Text {
+                text:"Update Widget"
+                color:Theme.textColor
+                anchors.centerIn:parent
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled:true
+                onClicked:{
+                    apiNum.text.length > 1 ?  executable.exec(updateCMD):""
+                }
+            }
+        }
     }
 
     function getData(url) {
@@ -245,5 +280,23 @@ Item {
             regionName.text=r1
         }
     return null
+    }
+
+    Plasma5Support.DataSource {
+        id: executable
+        engine: "executable"
+        connectedSources: []
+        onNewData: {
+            let exitCode = data["exit code"]
+            let exitStatus = data["exit status"]
+            let stdout = data["stdout"]
+            let stderr = data["stderr"]
+            exited(exitCode, exitStatus, stdout, stderr)
+            disconnectSource(sourceName) // cmd finished
+        }
+        function exec(cmd) {
+            connectSource(cmd)
+        }
+        signal exited(int exitCode, int exitStatus, string stdout, string stderr)
     }
 }
