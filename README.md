@@ -9,6 +9,7 @@ Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
 
 * Download repo to $HOME/.local/share/plasma/plasmoids/pirateWeather/
 * Or install with ``` git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -i ./pirateWeather/ ```
+* Upgrade with ```  git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -u ./pirateWeather/ ```
 * Install widget to panel or desktop floating
 * Right click on widget to configure
 * Enter API Key
