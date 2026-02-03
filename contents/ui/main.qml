@@ -16,8 +16,8 @@ PlasmoidItem {
 
     property bool isConfigured:false
     property string apiKey: plasmoid.configuration.apiKey
-    property string measUnits:detectSystemUnits()
     property int updateInterval: plasmoid.configuration.updateInterval
+    property string measUnits:plasmoid.configuration.measUnits
     property string latPoint: plasmoid.configuration.latCode
     property string lonPoint: plasmoid.configuration.lonCode
     property string cityName:plasmoid.configuration.cityName
@@ -63,13 +63,6 @@ PlasmoidItem {
             onTriggered:getData(weatherURL)
         }
     ]
-
-   function detectSystemUnits() {
-       let units=""
-       let measurementSystem = Qt.locale().measurementSystem
-       measurementSystem === 0 ? units="si" : units="us"
-       return units
-   }
 
     function getData(url) {
         let xhr = new XMLHttpRequest();

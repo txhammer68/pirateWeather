@@ -20,7 +20,7 @@ Item {
     }
 
     Text {
-        text:"Last update: "+isConfigured ? lastUpdate:"NA"
+        text:isConfigured ? lastUpdate:"NA"
         color:Theme.disabledTextColor
         antialiasing : true
         font.pointSize:10
@@ -33,7 +33,7 @@ Item {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             hoverEnabled:true
-            onEntered: parent.color=Theme.hoverColor
+            onEntered: parent.color=Theme.positiveTextColor
             onExited:parent.color=Theme.textColor
             onClicked:getData(weatherURL)
         }
@@ -65,7 +65,7 @@ Item {
         anchors.left:fullRepresentation.left
         anchors.topMargin:5
         anchors.leftMargin:5
-        text:isConfigured ? cityName + "," + regionName : "--"
+        text:isConfigured ? cityName.length > 0 ? cityName + "," + regionName : "":"--"
         color:Theme.textColor
         font.pointSize:14
         antialiasing : true
@@ -252,7 +252,7 @@ Item {
         }
 
         Text {
-            text:Math.round(weatherData.hourly.data[index].temperature)+"°  ~  "+Math.floor(weatherData.hourly.data[index].precipProbability/10)*10+"%"
+            text:Math.round(weatherData.hourly.data[index].temperature)+"°  ~  "+Math.floor(weatherData.hourly.data[index].precipProbability*100/10)*10+"%"
             color:Theme.textColor
             font.pointSize:10
             antialiasing : true

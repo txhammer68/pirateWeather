@@ -8,6 +8,7 @@ Item {
 
     property alias cfg_apiKey: apiNum.text
     property alias cfg_updateInterval: updateInterval.value
+    property string cfg_measUnits:"us"
     property alias cfg_latCode: latCode.text
     property alias cfg_lonCode: lonCode.text
     property alias cfg_cityName:cityName.text
@@ -70,7 +71,7 @@ Item {
         Row {
             spacing:10
             Text {
-                text:"Enter Update Interval"
+                text:"Select Update Interval"
                 color:Theme.textColor
                 topPadding:7
                 width:172
@@ -83,6 +84,28 @@ Item {
             value:15
           }
         }
+
+        Row {
+            spacing:10
+            Text {
+                text:"Select Measurment Units"
+                color:Theme.textColor
+                topPadding:7
+                width:172
+                horizontalAlignment:Text.AlignLeft
+            }
+            QQC2.ComboBox {
+                id:measSel
+                currentIndex: -1
+                width:196
+                height:32
+                displayText: currentIndex < 0 ? "Select Units" : currentText
+                model: ["Metric","Imperial"]
+                onCurrentIndexChanged: {
+                        cfg_measUnits = measSel.currentIndex == 0 ? "si":"us"
+                    }
+                }
+            }
 
         Row {
             spacing:10
@@ -150,7 +173,7 @@ Item {
             width:120
             height:32
             color:"transparent"
-            border.color:apiNum.text.length == 40 ? Theme.linkColor:Theme.disabledTextColor
+            border.color:apiNum.text.length > 1 ? Theme.linkColor:Theme.disabledTextColor
             radius:6
 
             Text {
@@ -164,12 +187,12 @@ Item {
                 cursorShape: Qt.PointingHandCursor
                 hoverEnabled:true
                 onClicked:{
-                    apiNum.text.length == 40 ? getData(url1):""
+                    apiNum.text.length > 1 ? getData(url1):""
                 }
             }
             Text {
                 text:"Disable VPN First"
-                color:apiNum.text.length == 40 ? Theme.textColor:Theme.disabledTextColor
+                color:apiNum.text.length > 1 ? Theme.textColor:Theme.disabledTextColor
                 anchors.left:getGeoCodes.right
                 anchors.bottom:getGeoCodes.bottom
                 anchors.leftMargin:15
