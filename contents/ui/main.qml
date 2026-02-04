@@ -38,7 +38,7 @@ PlasmoidItem {
         "rain":'\uf019',
         "snow":'\uf01b',
         "sleet":'\uf0b5',
-        "wind":'\uf021',
+        "wind":'\uf001',
         "fog": '\uf014',
         "cloudy":'\uf013',
         "partly-cloudy-day":'\uf002',
