@@ -9,9 +9,19 @@
       <label>Enter API Key</label>
       <attribute name="apiKey" use="required" type="string"/>
     </entry>
-    <entry name="measUnits" type="int">
+    <entry name="idx" type="int">
       <label>Select Measurement Units</label>
-      <attribute name="measUnits" use="required" type="int"/>
+      <attribute name="idx" use="required" type="int"/>
+      <default></default>
+    </entry>
+    <entry name="units" type="string">
+      <label>Select Measurement Units</label>
+      <attribute name="units" use="required" type="string"/>
+      <default></default>
+    </entry>
+    <entry name="windUnits" type="string">
+      <label>Select Measurement Units</label>
+      <attribute name="windUnits" use="required" type="string"/>
       <default></default>
     </entry>
     <entry name="updateInterval" type="int">
