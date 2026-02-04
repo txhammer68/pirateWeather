@@ -17,13 +17,14 @@ PlasmoidItem {
     property bool isConfigured:false
     property string apiKey: plasmoid.configuration.apiKey
     property int updateInterval: plasmoid.configuration.updateInterval
-    property int measUnits:plasmoid.configuration.measUnits
+    //property int measUnits:plasmoid.configuration.measUnits
     property string latPoint: plasmoid.configuration.latCode
     property string lonPoint: plasmoid.configuration.lonCode
     property string cityName:plasmoid.configuration.cityName
     property string regionName:plasmoid.configuration.regionName
 
-    property string units: measUnits == 0 ? "si":"us"
+    property string units:plasmoid.configuration.units
+    property string windUnits:plasmoid.configuration.windUnits
 
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
 

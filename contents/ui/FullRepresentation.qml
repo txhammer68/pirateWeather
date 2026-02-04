@@ -5,10 +5,10 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth: 530
-    Layout.preferredHeight: 320
-    width: 530
-    height: 320
+    Layout.preferredWidth: 540
+    Layout.preferredHeight: 330
+    width: 540
+    height: 330
 
     Connections {
         target: root
@@ -49,9 +49,9 @@ Item {
             rh="    Humidity: "+Math.round(weatherData.currently.humidity*100)+"%"
             if (weatherData.currently.windGust != undefined) {
                 if (weatherData.currently.windGust > 0) {
-                    winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + (measUnits == 0 ? " kmh" : " mph")
+                    winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + windUnits
                 }
-                else winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ (measUnits == 0 ? " kmh" : " mph")
+                else winds="    Wind: "+degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ windUnits
             }
             s1=rf+rh+winds
         }

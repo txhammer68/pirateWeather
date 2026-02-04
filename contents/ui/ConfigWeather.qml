@@ -11,15 +11,20 @@ Item {
 
     property alias cfg_apiKey: apiNum.text
     property alias cfg_updateInterval: updateInterval.value
-    property alias cfg_measUnits:measSel.currentIndex
+    property alias cfg_idx:measSel.currentIndex
+    property string cfg_units
+    property string cfg_windUnits
     property alias cfg_latCode: latCode.text
     property alias cfg_lonCode: lonCode.text
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
+
     property string ipAddress:""
     property string url1:"https://api.ipify.org/?format=json"
     property string url2:"http://ip-api.com/json/"+ipAddress
     property string updateCMD:"git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/"
+
+    Component.onCompleted:measSel.currentIndex=cfg_idx
 
     Text {
         id:appVer
@@ -113,7 +118,8 @@ Item {
                 width:196
                 height:32
                 displayText: currentIndex < 0 ? "Select Units" : currentText
-                model: ["Metric","Imperial"]
+                model: ["Canadian SI","Metric SI","UK SI","Imperial US"]
+                onCurrentIndexChanged:formatMeasUnits ()
                 }
             }
 
@@ -255,6 +261,25 @@ Item {
             }
         }
         xhr.send();
+    }
+
+    function formatMeasUnits () {
+        if (measSel.currentIndex == 0) {
+            cfg_units="ca"
+            cfg_windUnits=" kmh"
+        }
+        else if (measSel.currentIndex == 1) {
+            cfg_units="si"
+            cfg_windUnits=" mps"
+        }
+        else if (measSel.currentIndex == 2) {
+            cfg_units="uk"
+            cfg_windUnits=" mph"
+        }
+        else if (measSel.currentIndex == 3) {
+            cfg_units="us"
+            cfg_windUnits=" mph"
+        }
     }
 
     function processIPAddress (data) {
