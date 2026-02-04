@@ -11,7 +11,7 @@ Item {
 
     property alias cfg_apiKey: apiNum.text
     property alias cfg_updateInterval: updateInterval.value
-    property string cfg_measUnits:measSel.currentIndex
+    property alias cfg_measUnits:measSel.currentIndex
     property alias cfg_latCode: latCode.text
     property alias cfg_lonCode: lonCode.text
     property alias cfg_cityName:cityName.text
@@ -110,7 +110,6 @@ Item {
             }
             QQC2.ComboBox {
                 id:measSel
-                currentIndex: -1
                 width:196
                 height:32
                 displayText: currentIndex < 0 ? "Select Units" : currentText
