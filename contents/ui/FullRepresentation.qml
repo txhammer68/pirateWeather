@@ -67,7 +67,7 @@ Item {
         anchors.leftMargin:5
         text:isConfigured ? cityName.length > 0 ? cityName + "," + regionName : "":"--"
         color:Theme.textColor
-        font.pointSize:14
+        font.pointSize:12
         antialiasing : true
     }
 
