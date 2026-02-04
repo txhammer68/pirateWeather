@@ -26,4 +26,4 @@ git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma
 * Added Update Widget Button in the Config Screen
   * Remove $HOME/pirateWeather/ folder before updating
   * Logout after update for update to be applied
-  * Verify settings/config after update
+  * Verify settings/config after login
