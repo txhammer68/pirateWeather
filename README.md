@@ -23,3 +23,4 @@ git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma
 * Uses IP address to get geo coordinates - Disable VPN on first install/use
 * Click Get GeoCodes to get Geo Coordinates Locatiion
 * Click on the top right corner (last update time) to refresh data or Right Click on widget to Refresh Data
+* Added Update Widget Button in the Config Screen,logout after update for update to be applied
