@@ -6,7 +6,7 @@
                 "Name": "TxHammer68"
             }
         ],
-        "BugReportUrl": "https://github.com/txhammer68/pirateWeather",
+        "BugReportUrl": "https://github.com/txhammer68/pirateWeather/issues",
         "Category": "Environment and Weather",
         "Description": "Plasmoid showing weather information from Pirate Weather",
         "FormFactors": [
