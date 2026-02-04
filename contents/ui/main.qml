@@ -17,7 +17,7 @@ PlasmoidItem {
     property bool isConfigured:false
     property string apiKey: plasmoid.configuration.apiKey
     property int updateInterval: plasmoid.configuration.updateInterval
-    property string measUnits:plasmoid.configuration.measUnits
+    property int measUnits:plasmoid.configuration.measUnits
     property string latPoint: plasmoid.configuration.latCode
     property string lonPoint: plasmoid.configuration.lonCode
     property string cityName:plasmoid.configuration.cityName
