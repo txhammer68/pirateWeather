@@ -236,7 +236,7 @@ Item {
             radius:6
             Text {
                 text:"Update Widget"
-                color:Theme.textColor
+                color:updateAvail ?  Theme.textColor:Theme.disabledTextColor
                 anchors.centerIn:parent
             }
             MouseArea {
