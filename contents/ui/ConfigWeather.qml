@@ -127,7 +127,7 @@ Item {
                 width:196
                 height:32
                 displayText: currentIndex < 0 ? "Select Units" : currentText
-                model: ["Canadian SI","Metric SI","UK SI","Imperial US"]
+                model: ["Canadian SI","Metric SI","UK SI","US Imperial"]
                 onCurrentIndexChanged:formatMeasUnits ()
                 }
             }
