@@ -203,7 +203,7 @@ Item {
 
             Text {
                 text:"Get Geo Codes"
-                color:Theme.textColor
+                color:apiNum.text.length > 1 ? Theme.textColor:Theme.disabledTextColor
                 anchors.centerIn:parent
             }
 
