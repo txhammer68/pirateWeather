@@ -9,4 +9,9 @@ ConfigModel {
          icon: "settings"
          source: "ConfigWeather.qml"
     }
+    ConfigCategory {
+        name: "Setup"
+        icon: "mdmsetup"
+        source: "SetupConfig.qml"
+    }
 }
