@@ -22,9 +22,18 @@ Item {
     property string ipAddress:""
     property string url1:"https://api.ipify.org/?format=json"
     property string url2:"http://ip-api.com/json/"+ipAddress
+    property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
     property string updateCMD:"git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/"
 
-    Component.onCompleted:measSel.currentIndex=cfg_idx
+    property double currentVersion:Plasmoid.metaData.version
+    property double updateVersion:0.0
+    property bool updateAvail:false
+    property string updateMsg:"Updated Version Ready "+"("+updateVersion+")"
+
+    Component.onCompleted:{
+        getData(updateURL)
+        measSel.currentIndex=cfg_idx
+    }
 
     Text {
         id:appVer
@@ -33,7 +42,7 @@ Item {
         anchors.margins:10
         text:Plasmoid.metaData.version
         color:Theme.disabledTextColor
-        font.pointSize:9
+        font.pointSize:11
     }
 
     Column {
@@ -216,27 +225,35 @@ Item {
             }
         }
 
+        Row {
+            spacing :10
         Rectangle {
             id:updateWidget
             width:120
             height:32
             color:"transparent"
-            border.color:apiNum.text.length > 1 ? Theme.linkColor:Theme.disabledTextColor
+            border.color:updateAvail ? Theme.linkColor:Theme.disabledTextColor
             radius:6
-
             Text {
                 text:"Update Widget"
                 color:Theme.textColor
                 anchors.centerIn:parent
             }
-
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                hoverEnabled:true
+                hoverEnabled:updateAvail
                 onClicked:{
-                    apiNum.text.length > 1 ?  executable.exec(updateCMD):""
+                    updateAvail ? executable.exec(updateCMD):""
                 }
+              }
+            }
+            Text {
+                text:updateMsg
+                color:Theme.textColor
+                font.pointSize:11
+                topPadding:5
+                visible:updateAvail
             }
         }
     }
@@ -256,6 +273,11 @@ Item {
                         let response = xhr.responseText
                         let data = JSON.parse(response)
                         processGeoData(data)
+                    }
+                    else {
+                        let response = xhr.responseText
+                        let data = JSON.parse(response)
+                        processUpdateData(data)
                     }
                 }
             }
@@ -304,6 +326,13 @@ Item {
             regionName.text=r1
         }
     return null
+    }
+
+    function processUpdateData (data) {
+        updateVersion=data.KPlugin.Version
+        if (updateVersion > currentVersion) {
+            updateAvail=true
+        }
     }
 
     Plasma5Support.DataSource {

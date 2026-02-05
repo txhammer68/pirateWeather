@@ -1,15 +1,13 @@
 import QtQuick
 import QtQuick.Layouts
-import org.kde.plasma.plasmoid
-import org.kde.plasma.core as PlasmaCore
 
 Item {
     id: compactRepresentation
-
-    anchors.fill: parent
+    Layout.minimumWidth: 36
+    Layout.preferredWidth: 64
 
     CompactItem {
         id: compactItem
-        inTray: false
+        anchors.fill: parent
     }
 }

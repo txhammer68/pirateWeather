@@ -6,9 +6,9 @@ import org.kde.kirigami.platform
 Item {
     id: fullRepresentation
     Layout.preferredWidth: 540
-    Layout.preferredHeight: 330
+    Layout.preferredHeight: 320
     width: 540
-    height: 330
+    height: 320
 
     Connections {
         target: root
@@ -20,7 +20,7 @@ Item {
     }
 
     Text {
-        text:isConfigured ? lastUpdate:"NA"
+        text:isConfigured ? lastUpdate : "NA"
         color:Theme.disabledTextColor
         antialiasing : true
         font.pointSize:10
@@ -38,6 +38,7 @@ Item {
             onClicked:getData(weatherURL)
         }
     }
+
     function formatConditionsText () {
         let s1=""
         let rf=""

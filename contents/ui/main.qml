@@ -28,17 +28,20 @@ PlasmoidItem {
 
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
 
+
     property var weatherData:{}
     property string lastUpdate:"--"
     property bool weatherWarnings:false
     property string alertText: ""
+    property bool weatherAlert:false
+
 
     property var iconCode:{"clear-day": '\uf00d',
         "clear-night": '\uf02e',
         "rain":'\uf019',
         "snow":'\uf01b',
         "sleet":'\uf0b5',
-        "wind":'\uf001',
+        "wind":'\uf021',
         "fog": '\uf014',
         "cloudy":'\uf013',
         "partly-cloudy-day":'\uf002',
@@ -55,6 +58,7 @@ PlasmoidItem {
 
     onWeatherURLChanged:getData(weatherURL)
     onUpdateIntervalChanged: weatherTimer.restart()
+    onWeatherWarningsChanged:weatherWarnings ? weatherAlert=true : weatherAlert=false
 
     Plasmoid.contextualActions: [
         PlasmCore.Action {
@@ -73,9 +77,11 @@ PlasmoidItem {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
-                    let response = xhr.responseText
-                    let data = JSON.parse(response)
-                    processWeatherData(data)
+                    if (url == weatherURL) {
+                        let response = xhr.responseText
+                        let data = JSON.parse(response)
+                        processWeatherData(data)
+                    }
                 }
             }
         }
