@@ -18,7 +18,7 @@ git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma
 * Install widget to panel or desktop floating
 * Right click on widget to configure
 * Enter API Key [Get API Key here](https://pirate-weather.apiable.io/)
-* Select mesurement units: Metric or Imperial
+* Select mesurement units
 * Select Update Interval (10-60 mins)
 * Uses IP address to get geo coordinates - Disable VPN on first install/use
 * Click Get GeoCodes to get Geo Coordinates Locatiion
