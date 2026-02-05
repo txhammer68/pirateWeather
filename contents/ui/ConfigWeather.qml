@@ -241,7 +241,7 @@ Item {
             }
             MouseArea {
                 anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
+                cursorShape: updateAvail ? Qt.PointingHandCursor:Qt.ArrowCursor
                 hoverEnabled:updateAvail
                 onClicked:{
                     updateAvail ? executable.exec(updateCMD):""
