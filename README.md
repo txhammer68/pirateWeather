@@ -8,8 +8,8 @@ Pirate Weather was developed on the closure of Dark Sky Weather providing an alt
 #### Forecast View
  <img alt="previewFull" src="previewFull.png" width="40%">
  
-Sources - https://docs.pirateweather.net/en/latest/DataSources/ <br>
-Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
+Data Sources - https://docs.pirateweather.net/en/latest/DataSources/ <br>
+Sign up for a free api key here https://pirate-weather.apiable.io/ <br>
 
 * Install with
  ``` bash
