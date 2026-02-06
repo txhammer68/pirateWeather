@@ -6,7 +6,7 @@ Pirate Weather was developed on the closure of Dark Sky Weather providing an alt
  <img alt="preview" src="preview.png" width="40%">
  
 #### Forecast View
- <img alt="preview" src="previewFull.png" width="40%">
+ <img alt="previewFull" src="previewFull.png" width="40%">
  
 Sources - https://docs.pirateweather.net/en/latest/DataSources/ <br>
 Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
