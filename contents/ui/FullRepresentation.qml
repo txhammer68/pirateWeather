@@ -102,12 +102,14 @@ Item {
             id:story
             text:isConfigured ?  weatherWarnings ? alertText : weatherData.hourly.summary : "No Data,Check Settings or Network Connection,Refresh Data"
             Layout.fillWidth : true
+            fontSizeMode:Text.HorizontalFit
+            minimumPixelSize: 9
             wrapMode:Text.NoWrap
             maximumLineCount: 1
             elide: Text.ElideRight
             width:fullRepresentation.width*.95
             color:Theme.textColor
-            font.pointSize:isConfigured ? 14:12
+            font.pointSize:12
             antialiasing : true
             MouseArea {
                 id: mouseArea
