@@ -9,11 +9,11 @@ Sign up for a free apikey here https://pirate-weather.apiable.io/ <br>
 
 * Install with
  ``` bash
-git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -i ./pirateWeather/
+git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather/ && kpackagetool6 -t Plasma/Applet -i ./pirateWeather/
 ```
 * Upgrade with
 ``` bash
-git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/
+git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/
 ```
 * Install widget to panel or desktop floating
 * Right click on widget to configure
