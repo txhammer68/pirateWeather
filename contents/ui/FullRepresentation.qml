@@ -240,7 +240,7 @@ Item {
                     color:Theme.textColor
                     font.pointSize:11
                     antialiasing : true
-                    width:80
+                    width:106
                 }
                 Text {
                     text:"UVI"
