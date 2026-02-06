@@ -17,7 +17,7 @@ PlasmoidItem {
     property bool isConfigured:false
     property string apiKey: plasmoid.configuration.apiKey
     property int updateInterval: plasmoid.configuration.updateInterval
-    //property int measUnits:plasmoid.configuration.measUnits
+    property bool showForecast:plasmoid.configuration.forecastSel
     property string latPoint: plasmoid.configuration.latCode
     property string lonPoint: plasmoid.configuration.lonCode
     property string cityName:plasmoid.configuration.cityName
@@ -28,14 +28,11 @@ PlasmoidItem {
 
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
 
-
     property var weatherData:{}
     property string lastUpdate:"--"
     property bool weatherWarnings:false
     property string alertText: ""
     property bool weatherAlert:false
-
-
     property var iconCode:{"clear-day": '\uf00d',
         "clear-night": '\uf02e',
         "rain":'\uf019',
@@ -48,12 +45,17 @@ PlasmoidItem {
         "partly-cloudy-night":'\uf031',
         "hail":'\uf015',
         "thunderstorm":'\uf01e',
-        "tornado":'\uf056'}
+        "tornado":'\uf056'
+    }
 
-       Component.onCompleted:{
+    Component.onCompleted:{
            if (apiKey.length > 0) {
             getData(weatherURL)
            }
+    }
+
+    FontLoader {
+        source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
     onWeatherURLChanged:getData(weatherURL)
@@ -111,6 +113,28 @@ PlasmoidItem {
         var val = Math.floor((num / 22.5) + 0.5);
         var arr = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
         return arr[(val % 16)];
+    }
+
+    function calcAQI () {
+        if (Math.round(weatherData.currently.ozone) > 300 && Math.round(weatherData.currently.ozone) < 501  ) {
+            return "Good" }
+        else if (Math.round(weatherData.currently.ozone) < 299 && Math.round(weatherData.currently.ozone) > 220 ) {
+             return "Moderate" }
+        else if (Math.round(weatherData.currently.ozone) < 220) {
+            return "Unhealthy" }
+    }
+
+    function calcUVI () {
+        if (weatherData.currently.uvIndex < 3) {
+            return "Low" }
+        else if (weatherData.currently.uvIndex < 6 ) {
+             return "Moderate" }
+        else if (weatherData.currently.uvIndex < 9 ) {
+             return "High" }
+        else if (weatherData.currently.uvIndex < 11 ) {
+             return "Very High" }
+        else if (weatherData.currently.uvIndex > 11 ) {
+             return "Extreme" }
     }
 
     Timer {

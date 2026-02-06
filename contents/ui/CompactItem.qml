@@ -15,10 +15,6 @@ Item {
         }
     }
 
-    FontLoader {
-        source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
-    }
-
     RowLayout {
         id: simpleLayout
         anchors.fill: parent

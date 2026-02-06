@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
 import org.kde.plasma.configuration
@@ -11,6 +12,7 @@ Item {
 
     property alias cfg_apiKey: apiNum.text
     property alias cfg_updateInterval: updateInterval.value
+    property alias cfg_forecastSel: forecastSel.checked
     property alias cfg_idx:measSel.currentIndex
     property string cfg_units
     property string cfg_windUnits
@@ -23,7 +25,7 @@ Item {
     property string url1:"https://api.ipify.org/?format=json"
     property string url2:"http://ip-api.com/json/"+ipAddress
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
-    property string updateCMD:"git clone https://github.com/TxHammer68/pirateWeather && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/"
+    property string updateCMD:"git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather/ && kpackagetool6 -t Plasma/Applet -u ./pirateWeather/"
 
     property double currentVersion:Plasmoid.metaData.version
     property double updateVersion:0.0
@@ -52,7 +54,7 @@ Item {
         topPadding:5
         leftPadding:20
         width:parent.width-50
-        spacing:10
+        spacing:9
 
         Image {
             id:logo
@@ -111,6 +113,21 @@ Item {
             to:60
             value:15
           }
+        }
+
+        Row {
+            spacing:10
+            Text {
+                text:"Show Forecast"
+                width:172
+                color:Theme.textColor
+                horizontalAlignment:Text.AlignLeft
+            }
+            QQC2.CheckBox {
+                id:forecastSel
+                checked: true
+                //text: qsTr("Third")
+            }
         }
 
         Row {
@@ -226,7 +243,7 @@ Item {
         }
 
         Row {
-            spacing :10
+            spacing:10
         Rectangle {
             id:updateWidget
             width:120

@@ -13,7 +13,6 @@ Item {
 * Click Get GeoCodes to get Geo Coordinates Locatiion
 * Click on the top right corner (last update time) to refresh data or Right Click on widget to Refresh Data
 * Added Update Widget Button in the Config Screen
-  * Remove $HOME/pirateWeather/ folder before updating
   * Logout after update for update to be applied
   * Verify settings/config after login"
 
