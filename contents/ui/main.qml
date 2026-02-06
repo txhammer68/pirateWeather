@@ -6,6 +6,7 @@ import QtNetwork
 import org.kde.plasma.configuration
 
 // pirate weather widget
+// api docs https://pirateweather.net/en/latest/API/
 // txhammer 01/2026
 
 PlasmoidItem {
