@@ -297,7 +297,7 @@ Item {
                     color:Theme.textColor
                     font.pointSize:14
                     antialiasing : true
-                    width:48
+                    width:72
                 }
                 Text {
                     text:"\uf00d"
