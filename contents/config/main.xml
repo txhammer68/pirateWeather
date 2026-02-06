@@ -29,6 +29,11 @@
       <attribute name="updateInterval" use="required" type="int"/>
       <default>15</default>
     </entry>
+    <entry name="forecastSel" type="bool">
+      <label>Show Forecast</label>
+      <attribute name="forecastSel" use="required" type="bool"/>
+      <default>true</default>
+    </entry>
     <entry name="lonCode" type="string">
       <label>Enter Longitude Code</label>
       <attribute name="lonCode" use="required" type="string"/>
