@@ -31,3 +31,4 @@ git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather/ && kpa
   * Logout after update for update to be applied
   * Verify settings/config after login
   * You can resize popup to get proper fit
+  * hourly forecast is scrollable w/ mouse wheel
