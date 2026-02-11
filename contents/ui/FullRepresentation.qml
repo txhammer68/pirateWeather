@@ -5,10 +5,10 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth: 540
-    Layout.preferredHeight: showForecast ? 320:260
-    width: 540
-    height: showForecast ? 320:260
+    Layout.preferredWidth: 550
+    Layout.preferredHeight: root.showForecast ? 410:280
+    width: 550
+    height: root.showForecast ? 410:280
 
     Connections {
         target: root
@@ -16,6 +16,29 @@ Item {
             hourlyForecast.positionViewAtBeginning()
             hourlyForecast.visible=true
             dailyForecast.visible=false
+        }
+    }
+
+    ToolTip {
+        id: wtips
+        text: weatherWarnings ?  weatherData.alerts[0].description : ""
+        visible: false
+        delay:1000
+        x:story.x+80
+        y:story.y+120
+        contentItem: Text {
+            text: wtips.text
+            font.pointSize:12
+            width:320
+            leftPadding:10
+            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
+            color: Theme.textColor
+        }
+        background: Rectangle {
+            color:Theme.activeBackgroundColor
+            radius:6
+            width:parent.width
         }
     }
 
@@ -110,13 +133,30 @@ Item {
             color:Theme.textColor
             font.pointSize:14
             antialiasing : true
+
             MouseArea {
                 id: mouseArea
                 anchors.fill: parent
                 cursorShape: weatherWarnings ? Qt.PointingHandCursor : Qt.ArrowCursor
                 hoverEnabled: weatherWarnings ? true : false
-                onEntered:weatherWarnings ? parent.color=Theme.linkColor : parent.color=Theme.textColor
-                onExited:weatherWarnings ? parent.color=Theme.textColor : parent.color=Theme.textColor
+                onEntered:{
+                    if (weatherWarnings) {
+                        parent.color=Theme.linkColor
+                        wtips.visible=true
+                    }
+                    else {
+                        parent.color=Theme.textColor
+                    }
+                }
+                onExited:{
+                    if (weatherWarnings) {
+                        parent.color=Theme.textColor
+                        wtips.visible=false
+                    }
+                    else {
+                        parent.color=Theme.textColor
+                    }
+                }
                 onClicked: {
                     Qt.openUrlExternally(weatherData.alerts[0].uri)
                 }
@@ -432,7 +472,7 @@ Item {
     Item {
         id:hourly
         anchors.top:viewForecast.bottom
-        anchors.topMargin:10
+        anchors.topMargin:15
         anchors.left:fullRepresentation.left
         anchors.leftMargin:20
         width:fullRepresentation.width*.96

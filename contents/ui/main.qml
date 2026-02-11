@@ -27,8 +27,9 @@ PlasmoidItem {
     property string units:plasmoid.configuration.units
     property string windUnits:plasmoid.configuration.windUnits
 
-    property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
+    //property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
 
+    property string weatherURL:"/home/matt/Projects/qml/weather/dark-sky/weather.json"
     property var weatherData:{}
     property string lastUpdate:"--"
     property bool weatherWarnings:false
@@ -53,6 +54,13 @@ PlasmoidItem {
            if (apiKey.length > 0) {
             getData(weatherURL)
            }
+    }
+
+    Timer {
+        running:true
+        repeat:false
+        interval:5000
+        onTriggered:getData(weatherURL)
     }
 
     FontLoader {
