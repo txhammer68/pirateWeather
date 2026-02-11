@@ -108,7 +108,7 @@ Item {
             maximumLineCount: 2
             width:fullRepresentation.width*.95
             color:Theme.textColor
-            font.pointSize:12
+            font.pointSize:14
             antialiasing : true
             MouseArea {
                 id: mouseArea
