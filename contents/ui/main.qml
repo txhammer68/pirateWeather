@@ -116,11 +116,11 @@ PlasmoidItem {
     }
 
     function calcAQI () {
-        if (Math.round(weatherData.currently.ozone) > 300 && Math.round(weatherData.currently.ozone) < 501  ) {
+        if (Math.round(weatherData.currently.ozone) > 299 && Math.round(weatherData.currently.ozone) < 501  ) {
             return "Good" }
-        else if (Math.round(weatherData.currently.ozone) < 299 && Math.round(weatherData.currently.ozone) > 220 ) {
+        else if (Math.round(weatherData.currently.ozone) < 300 && Math.round(weatherData.currently.ozone) > 220 ) {
              return "Moderate" }
-        else if (Math.round(weatherData.currently.ozone) < 220) {
+        else if (Math.round(weatherData.currently.ozone) < 219) {
             return "Unhealthy" }
     }
 

@@ -5,10 +5,10 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth: 550
+    Layout.preferredWidth: 528
     Layout.preferredHeight: root.showForecast ? 410:280
-    width: 550
-    height: root.showForecast ? 410:280
+    //width: 550
+    //height: root.showForecast ? 410:280
 
     Connections {
         target: root
@@ -474,7 +474,7 @@ Item {
         anchors.top:viewForecast.bottom
         anchors.topMargin:15
         anchors.left:fullRepresentation.left
-        anchors.leftMargin:20
+        anchors.leftMargin:15
         width:fullRepresentation.width*.96
         height:128
         visible:showForecast
@@ -550,16 +550,17 @@ Item {
         anchors.top:viewForecast.bottom
         anchors.left:fullRepresentation.left
         anchors.topMargin:10
-        anchors.leftMargin:30
+        //anchors.leftMargin:-10
         width:fullRepresentation.width
         height:128
         visible:showForecast
 
-        RowLayout {
+        Row {
             id:dailyForecast
-            spacing:10
-            width:daily.width
-            Layout.alignment:Qt.AlignHCenter
+            spacing:40
+            //width:daily.width*.90
+            //Layout.alignment:Qt.AlignHCenter
+            anchors.horizontalCenter:parent.horizontalCenter
             visible:false
             Repeater {
                 id:r1
@@ -569,6 +570,7 @@ Item {
                     color:Theme.textColor
                     font.pointSize:12
                     font.bold:true
+                    width:42
                     antialiasing : true
 
                     Image {
