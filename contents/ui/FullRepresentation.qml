@@ -103,6 +103,9 @@ Item {
             text:isConfigured ?  weatherWarnings ? alertText : weatherData.hourly.summary : "No Data,Check Settings or Network Connection,Refresh Data"
             fontSizeMode:Text.HorizontalFit
             minimumPixelSize: 9
+            Layout.fillWidth : true
+            wrapMode:Text.WordWrap
+            maximumLineCount: 2
             width:fullRepresentation.width*.95
             color:Theme.textColor
             font.pointSize:12
