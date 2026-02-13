@@ -241,7 +241,7 @@ Item {
                     bottomPadding:5
                 }
                 Text {
-                    text:weatherData.currently.windGust > 0 ? degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + windUnits : degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ windUnits
+                    text:(weatherData.currently.windGust > 0 && weatherData.currently.windGust > weatherData.currently.windSpeed) ? degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + windUnits : degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ windUnits
                     color:Theme.textColor
                     font.pointSize:14
                     antialiasing : true
