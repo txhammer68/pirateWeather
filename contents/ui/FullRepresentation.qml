@@ -5,8 +5,12 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth: 530
-    Layout.preferredHeight: root.showForecast ? 430:280
+    Layout.preferredWidth:530
+    Layout.preferredHeight:410
+    Layout.minimumWidth:480
+    Layout.maximumWidth:560
+    Layout.minimumHeight:220
+    Layout.maximumHeight:440
 
     Connections {
         target: root
@@ -41,7 +45,7 @@ Item {
     }
 
     Text {
-        text:isConfigured ? lastUpdate : "NA"
+        text: isConfigured ? lastUpdate : "NA"
         color:Theme.disabledTextColor
         antialiasing : true
         font.pointSize:10
@@ -66,7 +70,7 @@ Item {
         anchors.left:fullRepresentation.left
         anchors.topMargin:5
         anchors.leftMargin:10
-        text:isConfigured ? cityName.length > 0 ? cityName + "," + regionName : "":"--"
+        text: isConfigured ? cityName.length > 0 ? cityName + "," + regionName : "":"--"
         color:Theme.textColor
         font.pointSize:11
         antialiasing : true
@@ -497,10 +501,9 @@ Item {
             delegate:hourlyList
             ScrollBar.horizontal: ScrollBar {
                 id:scroll
-                //policy: ScrollBar.AsNeeded
+                policy: ScrollBar.AsNeeded
                 orientation: Qt.Horizontal
                 stepSize:.125
-                //size:.
                 parent: hourlyForecast.parent
                 hoverEnabled: true
                 active: hovered || pressed
@@ -550,7 +553,6 @@ Item {
         anchors.top:viewForecast.bottom
         anchors.left:fullRepresentation.left
         anchors.topMargin:10
-        //anchors.leftMargin:-10
         width:fullRepresentation.width
         height:128
         visible:showForecast
@@ -558,8 +560,6 @@ Item {
         Row {
             id:dailyForecast
             spacing:40
-            //width:daily.width*.90
-            //Layout.alignment:Qt.AlignHCenter
             anchors.horizontalCenter:parent.horizontalCenter
             visible:false
             Repeater {
@@ -570,7 +570,6 @@ Item {
                     color:Theme.textColor
                     font.pointSize:12
                     font.bold:true
-                    width:42
                     antialiasing : true
 
                     Image {
@@ -580,6 +579,7 @@ Item {
                         smooth:true
                         antialiasing : true
                         anchors.top:parent.bottom
+                        anchors.topMargin:5
                         anchors.horizontalCenter:parent.horizontalCenter
 
                         Text {
@@ -587,6 +587,7 @@ Item {
                             color:Theme.textColor
                             anchors.horizontalCenter:parent.horizontalCenter
                             anchors.top:parent.bottom
+                            topPadding:5
                             font.pointSize:12
                             antialiasing : true
 
@@ -595,6 +596,7 @@ Item {
                                 color:Theme.textColor
                                 anchors.horizontalCenter:parent.horizontalCenter
                                 anchors.top:parent.bottom
+                                topPadding:5
                                 font.pointSize:12
                                 antialiasing : true
                             }

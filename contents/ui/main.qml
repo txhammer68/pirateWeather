@@ -11,7 +11,7 @@ import org.kde.plasma.configuration
 
 PlasmoidItem {
     id: root
-
+    Plasmoid.configurationRequired:true
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
 
@@ -73,19 +73,19 @@ PlasmoidItem {
         }
     ]
 
-    function getData(url) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", url,false);
+    function getData(url) {  // get json data sources
+        let xhr = new XMLHttpRequest()
+        //xhr.timeout = 5000;
+        xhr.open("GET",url,true) // set Method and File  true=asynchronous
+        xhr.responseType = 'json'
+        xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    if (url == weatherURL) {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
+            if(xhr.readyState == 4) { // if request_status == DONE
+                if (xhr.status == 200) {
+                        let data = xhr.response
                         processWeatherData(data)
                     }
                 }
-            }
         }
         xhr.send();
     }
@@ -99,6 +99,7 @@ PlasmoidItem {
                 weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
                 alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
                 isConfigured=true
+                Plasmoid.configurationRequired=false
                 weatherTimer.restart()
             }
             else  {
