@@ -443,6 +443,7 @@ Item {
                 id:timeofDay
                 text:Qt.formatTime(new Date(weatherData.hourly.data[index].time*1000))
                 color:Theme.textColor
+                Layout.alignment:Qt.AlignHCenter
                 font.pointSize:10
                 antialiasing : true
                 font.bold:true
@@ -453,7 +454,7 @@ Item {
                 source:"../icons/"+weatherData.hourly.data[index].icon+".svg"
                 width:32
                 height:32
-                anchors.horizontalCenter:timeofDay.horizontalCenter
+                Layout.alignment:Qt.AlignHCenter
                 sourceSize.height:height
                 sourceSize.width:width
                 smooth:true
@@ -463,6 +464,7 @@ Item {
             Text {
                 text:Math.round(weatherData.hourly.data[index].temperature)+"°  ~  "+Math.floor(weatherData.hourly.data[index].precipProbability*100/10)*10+"%"
                 color:Theme.textColor
+                Layout.alignment:Qt.AlignHCenter
                 font.pointSize:10
                 antialiasing : true
             }
