@@ -5,10 +5,8 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth: 528
-    Layout.preferredHeight: root.showForecast ? 410:280
-    //width: 550
-    //height: root.showForecast ? 410:280
+    Layout.preferredWidth: 530
+    Layout.preferredHeight: root.showForecast ? 430:280
 
     Connections {
         target: root
