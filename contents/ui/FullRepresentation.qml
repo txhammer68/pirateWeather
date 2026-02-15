@@ -5,12 +5,12 @@ import org.kde.kirigami.platform
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth:530
-    Layout.preferredHeight:410
+    Layout.preferredWidth:550
+    Layout.preferredHeight:420
     Layout.minimumWidth:480
-    Layout.maximumWidth:560
+    Layout.maximumWidth:580
     Layout.minimumHeight:220
-    Layout.maximumHeight:440
+    Layout.maximumHeight:460
 
     Connections {
         target: root
@@ -178,14 +178,14 @@ Item {
                     color:Theme.textColor
                     font.pointSize:11
                     antialiasing : true
-                    width:76
+                    width:79
                 }
                 Text {
                     text:"Humidity"
                     color:Theme.textColor
                     font.pointSize:11
                     antialiasing : true
-                    width:74
+                    width:76
                 }
                 Text {
                     text:"Winds"
@@ -267,14 +267,14 @@ Item {
                     color:Theme.textColor
                     font.pointSize:11
                     antialiasing : true
-                    width:76
+                    width:79
                 }
                 Text {
                     text:"Visibility"
                     color:Theme.textColor
                     font.pointSize:11
                     antialiasing : true
-                    width:78
+                    width:76
                 }
                 Text {
                     text:"AQI"
@@ -438,7 +438,7 @@ Item {
         id:hourlyList
 
         ColumnLayout {
-            spacing:10
+            spacing:7
             Layout.alignment:Qt.AlignHCenter
 
             Text {
@@ -449,13 +449,12 @@ Item {
                 font.pointSize:10
                 antialiasing : true
                 font.bold:true
-                width:64
             }
 
             Image {
                 source:"../icons/"+weatherData.hourly.data[index].icon+".svg"
-                width:32
-                height:32
+                width:38
+                height:38
                 Layout.alignment:Qt.AlignHCenter
                 sourceSize.height:height
                 sourceSize.width:width
@@ -464,11 +463,64 @@ Item {
             }
 
             Text {
-                text:Math.round(weatherData.hourly.data[index].temperature)+"°  ~  "+Math.floor(weatherData.hourly.data[index].precipProbability*100/10)*10+"%"
+                text:Math.floor(weatherData.hourly.data[index].precipProbability*100/10)*10+"%"
                 color:Theme.textColor
                 Layout.alignment:Qt.AlignHCenter
-                font.pointSize:10
+                font.pointSize:12
                 antialiasing : true
+            }
+
+            Text {
+                text:Math.round(weatherData.hourly.data[index].temperature)+"°"
+                color:Theme.textColor
+                Layout.alignment:Qt.AlignHCenter
+                font.pointSize:12
+                antialiasing : true
+            }
+        }
+    }
+
+    Component{
+        id:dailyList
+
+        ColumnLayout {
+            spacing:7
+            Layout.alignment:Qt.AlignHCenter
+
+            Text {
+                text:Qt.formatDate(new Date(weatherData.daily.data[index].time*1000)," ddd ")
+                color:Theme.textColor
+                font.pointSize:12
+                font.bold:true
+                Layout.alignment:Qt.AlignHCenter
+                antialiasing: rue
+            }
+
+            Image {
+                source:"../icons/"+weatherData.daily.data[index].icon+".svg"
+                width:36
+                height:36
+                sourceSize.height:height
+                sourceSize.width:width
+                smooth:true
+                antialiasing:true
+                Layout.alignment:Qt.AlignHCenter
+            }
+
+            Text {
+                text:Math.round(weatherData.daily.data[index].precipProbability*100/10)*10+"% "
+                color:Theme.textColor
+                Layout.alignment:Qt.AlignHCenter
+                font.pointSize:12
+                antialiasing:true
+            }
+
+            Text {
+                text:Math.round(weatherData.daily.data[index].temperatureLow)+"° | "+Math.round(weatherData.daily.data[index].temperatureHigh)+"°"
+                color:Theme.textColor
+                Layout.alignment:Qt.AlignHCenter
+                font.pointSize:12
+                antialiasing:true
             }
         }
     }
@@ -494,6 +546,7 @@ Item {
             orientation:ListView.Horizontal
             layoutDirection:Qt.LeftToRight
             snapMode: ListView.SnapToItem
+            flickableDirection: Flickable.HorizontalFlick
             boundsBehavior: Flickable.StopAtBounds
             clip:true
             interactive:false
@@ -552,58 +605,29 @@ Item {
         id:daily
         anchors.top:viewForecast.bottom
         anchors.left:fullRepresentation.left
-        anchors.topMargin:10
-        width:fullRepresentation.width
+        anchors.topMargin:15
+        anchors.leftMargin:20
+        width:fullRepresentation.width*.98
         height:128
         visible:showForecast
 
-        Row {
+        ListView {
             id:dailyForecast
-            spacing:40
-            anchors.horizontalCenter:parent.horizontalCenter
+            anchors.top:daily.top
+            anchors.left:daily.left
             visible:false
-            Repeater {
-                id:r1
-                model: 6
-                Text {
-                    text:Qt.formatDate(new Date(weatherData.daily.data[index].time*1000)," ddd ")
-                    color:Theme.textColor
-                    font.pointSize:12
-                    font.bold:true
-                    antialiasing : true
-
-                    Image {
-                        source:"../icons/"+weatherData.daily.data[index].icon+".svg"
-                        width:36
-                        height:36
-                        smooth:true
-                        antialiasing : true
-                        anchors.top:parent.bottom
-                        anchors.topMargin:5
-                        anchors.horizontalCenter:parent.horizontalCenter
-
-                        Text {
-                            text:Math.round(weatherData.daily.data[index].precipProbability*100/10)*10+"% "
-                            color:Theme.textColor
-                            anchors.horizontalCenter:parent.horizontalCenter
-                            anchors.top:parent.bottom
-                            topPadding:5
-                            font.pointSize:12
-                            antialiasing : true
-
-                            Text {
-                                text:Math.round(weatherData.daily.data[index].temperatureLow)+"° | "+Math.round(weatherData.daily.data[index].temperatureHigh)+"°"
-                                color:Theme.textColor
-                                anchors.horizontalCenter:parent.horizontalCenter
-                                anchors.top:parent.bottom
-                                topPadding:5
-                                font.pointSize:12
-                                antialiasing : true
-                            }
-                        }
-                    }
-                }
-            }
+            spacing:10
+            width:daily.width
+            contentWidth: daily.width
+            height:128
+            orientation:ListView.Horizontal
+            layoutDirection:Qt.LeftToRight
+            snapMode: ListView.SnapToItem
+            boundsBehavior: Flickable.StopAtBounds
+            clip:true
+            interactive:false
+            model:7//weatherData.daily.data
+            delegate:dailyList
         }
     }
 }
