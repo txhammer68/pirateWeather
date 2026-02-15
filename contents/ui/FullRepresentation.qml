@@ -12,9 +12,15 @@ Item {
     Layout.minimumHeight:220
     Layout.maximumHeight:460
 
-    Connections {
+    Connections { // reset forecast views after updates
         target: root
         function onExpandedChanged() {
+            hourlyForecast.positionViewAtBeginning()
+            hourlyForecast.visible=true
+            dailyForecast.visible=false
+        }
+
+        function onWeatherDataChanged() {
             hourlyForecast.positionViewAtBeginning()
             hourlyForecast.visible=true
             dailyForecast.visible=false
@@ -493,7 +499,7 @@ Item {
                 font.pointSize:12
                 font.bold:true
                 Layout.alignment:Qt.AlignHCenter
-                antialiasing: rue
+                antialiasing:true
             }
 
             Image {

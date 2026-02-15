@@ -151,7 +151,7 @@ PlasmoidItem {
 
     Timer {                 // timer to trigger update after wake from suspend mode
         id: suspendTimer
-        interval: 20*1000;  // delay 20 secs for suspend to resume
+        interval: 20*1000  // delay 20 secs for suspend to resume
         running: false
         repeat:  false
         onTriggered: {
@@ -163,7 +163,7 @@ PlasmoidItem {
         target:NetworkInformation
         onReachabilityChanged: {
             if (NetworkInformation.reachability == 4) {
-                suspendTimer.start();
+                suspendTimer.start()
             }
         }
     }
