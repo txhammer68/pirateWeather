@@ -180,7 +180,7 @@ Item {
                 width:parent.width
                 bottomPadding:5
                 Text {
-                    text:"Real Feel"
+                    text:"Feels Like"
                     color:Theme.textColor
                     font.pointSize:11
                     antialiasing : true
