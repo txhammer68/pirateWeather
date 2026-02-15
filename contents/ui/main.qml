@@ -121,8 +121,10 @@ PlasmoidItem {
             return "Good" }
         else if (Math.round(weatherData.currently.ozone) < 300 && Math.round(weatherData.currently.ozone) > 220 ) {
              return "Moderate" }
-        else if (Math.round(weatherData.currently.ozone) < 219) {
+        else if (Math.round(weatherData.currently.ozone) <= 220) {
             return "Unhealthy" }
+        else  {
+            return "Unknown" }
     }
 
     function calcUVI () {
@@ -130,11 +132,11 @@ PlasmoidItem {
             return "Low" }
         else if (weatherData.currently.uvIndex < 6 ) {
              return "Moderate" }
-        else if (weatherData.currently.uvIndex < 9 ) {
+        else if (weatherData.currently.uvIndex < 8 ) {
              return "High" }
         else if (weatherData.currently.uvIndex < 11 ) {
              return "Very High" }
-        else if (weatherData.currently.uvIndex > 11 ) {
+        else if (weatherData.currently.uvIndex >= 11 ) {
              return "Extreme" }
     }
 
