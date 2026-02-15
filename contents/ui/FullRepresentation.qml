@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
 import org.kde.kirigami.platform
+import org.kde.plasma.plasmoid
 
 Item {
     id: fullRepresentation
@@ -536,7 +537,7 @@ Item {
         anchors.top:viewForecast.bottom
         anchors.topMargin:15
         anchors.left:fullRepresentation.left
-        anchors.leftMargin:15
+        anchors.leftMargin:10
         width:fullRepresentation.width*.96
         height:128
         visible:showForecast
@@ -545,7 +546,7 @@ Item {
             anchors.top:hourly.top
             anchors.left:hourly.left
             visible:true
-            spacing:10
+            spacing:14
             width:hourly.width
             contentWidth: hourly.width
             height:128
@@ -612,7 +613,7 @@ Item {
         anchors.top:viewForecast.bottom
         anchors.left:fullRepresentation.left
         anchors.topMargin:15
-        anchors.leftMargin:20
+        anchors.leftMargin:10
         width:fullRepresentation.width*.98
         height:128
         visible:showForecast
@@ -622,7 +623,7 @@ Item {
             anchors.top:daily.top
             anchors.left:daily.left
             visible:false
-            spacing:10
+            spacing:15
             width:daily.width
             contentWidth: daily.width
             height:128
