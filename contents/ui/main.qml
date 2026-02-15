@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
-import org.kde.plasma.core as PlasmCore
+import org.kde.plasma.core as PlasmaCore
 import QtNetwork
 import org.kde.plasma.configuration
 
@@ -63,7 +63,7 @@ PlasmoidItem {
     onWeatherWarningsChanged:weatherWarnings ? weatherAlert=true : weatherAlert=false
 
     Plasmoid.contextualActions: [
-        PlasmCore.Action {
+        PlasmaCore.Action {
             text: "Refresh Data"
            icon.name: Qt.application.layoutDirection === Qt.RightToLeft ? "view-refresh" : "view-refresh"
             priority: Plasmoid.HighPriorityAction
