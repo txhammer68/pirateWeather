@@ -1,15 +1,15 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import org.kde.kirigami.platform
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth:550
+    Layout.preferredWidth:570
     Layout.preferredHeight:420
     Layout.minimumWidth:480
-    Layout.maximumWidth:580
+    Layout.maximumWidth:600
     Layout.minimumHeight:220
     Layout.maximumHeight:460
 
@@ -42,10 +42,10 @@ Item {
             leftPadding:10
             wrapMode: Text.WordWrap
             elide: Text.ElideRight
-            color: Theme.textColor
+            color: Kirigami.Theme.textColor
         }
         background: Rectangle {
-            color:Theme.activeBackgroundColor
+            color:Kirigami.Theme.activeBackgroundColor
             radius:6
             width:parent.width
         }
@@ -53,7 +53,7 @@ Item {
 
     Text {
         text: isConfigured ? lastUpdate : "NA"
-        color:Theme.disabledTextColor
+        color:Kirigami.Theme.disabledTextColor
         antialiasing : true
         font.pointSize:10
         anchors.top:fullRepresentation.top
@@ -65,8 +65,8 @@ Item {
             anchors.fill: parent
             cursorShape: Qt.PointingHandCursor
             hoverEnabled:true
-            onEntered: parent.color=Theme.linkColor
-            onExited:parent.color=Theme.textColor
+            onEntered: parent.color=Kirigami.Theme.linkColor
+            onExited:parent.color=Kirigami.Theme.textColor
             onClicked:getData(weatherURL)
         }
     }
@@ -78,7 +78,7 @@ Item {
         anchors.topMargin:5
         anchors.leftMargin:10
         text: isConfigured ? cityName.length > 0 ? cityName + "," + regionName : "":"--"
-        color:Theme.textColor
+        color:Kirigami.Theme.textColor
         font.pointSize:11
         antialiasing : true
     }
@@ -106,7 +106,7 @@ Item {
             anchors.top:iconCode.top
             anchors.topMargin:10
             text:isConfigured ? "  "+Math.round(weatherData.currently.temperature)+"° " : "NA"
-            color:Theme.textColor
+            color:Kirigami.Theme.textColor
             font.pointSize:20
             antialiasing : true
         }
@@ -115,7 +115,7 @@ Item {
             id:summary
             anchors.bottom:temp.bottom
             text:isConfigured ? weatherData.currently.summary : "--"
-            color:Theme.textColor
+            color:Kirigami.Theme.textColor
             font.pointSize:20
             antialiasing : true
         }
@@ -139,7 +139,7 @@ Item {
             wrapMode:Text.WordWrap
             maximumLineCount: 2
             width:fullRepresentation.width*.95
-            color:Theme.textColor
+            color:Kirigami.Theme.textColor
             font.pointSize:14
             antialiasing : true
 
@@ -150,20 +150,20 @@ Item {
                 hoverEnabled: weatherWarnings ? true : false
                 onEntered:{
                     if (weatherWarnings) {
-                        parent.color=Theme.linkColor
+                        parent.color=Kirigami.Theme.linkColor
                         wtips.visible=true
                     }
                     else {
-                        parent.color=Theme.textColor
+                        parent.color=Kirigami.Theme.textColor
                     }
                 }
                 onExited:{
                     if (weatherWarnings) {
-                        parent.color=Theme.textColor
+                        parent.color=Kirigami.Theme.textColor
                         wtips.visible=false
                     }
                     else {
-                        parent.color=Theme.textColor
+                        parent.color=Kirigami.Theme.textColor
                     }
                 }
                 onClicked: {
@@ -182,21 +182,21 @@ Item {
                 bottomPadding:5
                 Text {
                     text:"Feels Like"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:79
                 }
                 Text {
                     text:"Humidity"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:76
                 }
                 Text {
                     text:"Winds"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:72
@@ -209,7 +209,7 @@ Item {
                 topPadding:20
                 Text {
                     text:"\uf055"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:12
                     font.family: 'weathericons'
                     antialiasing : true
@@ -217,7 +217,7 @@ Item {
                 }
                 Text {
                     text:Math.round(weatherData.currently.apparentTemperature)+"°"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     width:48
@@ -225,7 +225,7 @@ Item {
 
                 Text {
                     text:"\uf07a"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:12
                     font.family: 'weathericons'
                     antialiasing : true
@@ -234,7 +234,7 @@ Item {
 
                 Text {
                     text:Math.round(weatherData.currently.humidity*100)+"%"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     width:48
@@ -242,7 +242,7 @@ Item {
 
                 Text {
                     text:"\uf050"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:12
                     font.family: 'weathericons'
                     antialiasing : true
@@ -251,7 +251,7 @@ Item {
                 }
                 Text {
                     text:(weatherData.currently.windGust > 0 && weatherData.currently.windGust > weatherData.currently.windSpeed) ? degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + windUnits : degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ windUnits
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     width:48
@@ -271,28 +271,28 @@ Item {
 
                 Text {
                     text:"Dew Point"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:79
                 }
                 Text {
                     text:"Visibility"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:76
                 }
                 Text {
                     text:"AQI"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:106
                 }
                 Text {
                     text:"UVI"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     antialiasing : true
                     width:76
@@ -305,7 +305,7 @@ Item {
                 width:parent.width
                 Text {
                     text:"\uf04e"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     font.family: 'weathericons'
                     antialiasing : true
@@ -313,14 +313,14 @@ Item {
                 }
                 Text {
                     text:Math.round(weatherData.currently.dewPoint)+"°"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     width:48
                 }
                 Text {
                     text:"\uf047"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     font.family: 'weathericons'
                     antialiasing : true
@@ -328,7 +328,7 @@ Item {
                 }
                 Text {
                     text:Math.round(weatherData.currently.visibility) + (units=="us" ? "mi":"km")
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     topPadding:2
@@ -336,7 +336,7 @@ Item {
                 }
                 Text {
                     text:"\uf063"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:12
                     font.family: 'weathericons'
                     antialiasing : true
@@ -344,14 +344,14 @@ Item {
                 }
                 Text {
                     text:calcAQI()
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     width:72
                 }
                 Text {
                     text:"\uf00d"
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:11
                     font.family: 'weathericons'
                     antialiasing : true
@@ -360,7 +360,7 @@ Item {
                 }
                 Text {
                     text:calcUVI()
-                    color:Theme.textColor
+                    color:Kirigami.Theme.textColor
                     font.pointSize:14
                     antialiasing : true
                     width:48
@@ -376,7 +376,7 @@ Item {
         width: fullRepresentation.width*.95
         anchors.horizontalCenter:fullRepresentation.horizontalCenter
         height: 1
-        color: Theme.disabledTextColor
+        color: Kirigami.Theme.disabledTextColor
         antialiasing : true
         visible:showForecast
     }
@@ -395,12 +395,12 @@ Item {
             width:96
             height:32
             color:"transparent"
-            border.color:hourlyForecast.visible ? Theme.linkColor : Theme.activeBackgroundColor
+            border.color:hourlyForecast.visible ? Kirigami.Theme.linkColor : Kirigami.Theme.disabledTextColor
             radius:6
 
             Text {
                 text:"Hourly"
-                color:Theme.textColor
+                color:hourlyForecast.visible ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
                 anchors.centerIn:parent
             }
 
@@ -420,12 +420,12 @@ Item {
             width:96
             height:32
             color:"transparent"
-            border.color:dailyForecast.visible ? Theme.linkColor : Theme.activeBackgroundColor
+            border.color:dailyForecast.visible ? Kirigami.Theme.linkColor : Kirigami.Theme.disabledTextColor
             radius:6
 
             Text {
                 text:"Daily"
-                color:Theme.textColor
+                color:dailyForecast.visible ? Kirigami.Theme.textColor : Kirigami.Theme.disabledTextColor
                 anchors.centerIn:parent
             }
 
@@ -451,7 +451,7 @@ Item {
             Text {
                 id:timeofDay
                 text:Qt.formatTime(new Date(weatherData.hourly.data[index].time*1000))
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 Layout.alignment:Qt.AlignHCenter
                 font.pointSize:10
                 antialiasing : true
@@ -471,7 +471,7 @@ Item {
 
             Text {
                 text:Math.floor(weatherData.hourly.data[index].precipProbability*100/10)*10+"%"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 Layout.alignment:Qt.AlignHCenter
                 font.pointSize:12
                 antialiasing : true
@@ -479,7 +479,7 @@ Item {
 
             Text {
                 text:Math.round(weatherData.hourly.data[index].temperature)+"°"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 Layout.alignment:Qt.AlignHCenter
                 font.pointSize:12
                 antialiasing : true
@@ -496,7 +496,7 @@ Item {
 
             Text {
                 text:Qt.formatDate(new Date(weatherData.daily.data[index].time*1000)," ddd ")
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 font.pointSize:12
                 font.bold:true
                 Layout.alignment:Qt.AlignHCenter
@@ -516,7 +516,7 @@ Item {
 
             Text {
                 text:Math.round(weatherData.daily.data[index].precipProbability*100/10)*10+"% "
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 Layout.alignment:Qt.AlignHCenter
                 font.pointSize:12
                 antialiasing:true
@@ -524,7 +524,7 @@ Item {
 
             Text {
                 text:Math.round(weatherData.daily.data[index].temperatureLow)+"° | "+Math.round(weatherData.daily.data[index].temperatureHigh)+"°"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 Layout.alignment:Qt.AlignHCenter
                 font.pointSize:12
                 antialiasing:true
@@ -556,7 +556,7 @@ Item {
             flickableDirection: Flickable.HorizontalFlick
             boundsBehavior: Flickable.StopAtBounds
             clip:true
-            interactive:false
+            interactive:true
             model:weatherData.hourly.data
             delegate:hourlyList
             ScrollBar.horizontal: ScrollBar {
@@ -566,14 +566,16 @@ Item {
                 stepSize:.125
                 parent: hourlyForecast.parent
                 hoverEnabled: true
+                visible:false
                 active: hovered || pressed
                 interactive: false
                 anchors.fill:hourlyForecast
                 contentItem: Rectangle {
                     id:rect1
                     implicitWidth: 4
+                    //implicitHeight:contentItem.height/4
                     radius:6
-                    color:Theme.textColor
+                    color: Kirigami.Theme.textColor
                     antialiasing:true
                     smooth:true
                     opacity:scroll.active ? 1:0
@@ -588,7 +590,7 @@ Item {
                     implicitWidth: 4
                     radius:6
                     opacity:scroll.active  ? .65:0
-                    color: "black"
+                    color: Kirigami.Theme.activeBackgroundColor
                     antialiasing:true
                     smooth:true
                     Behavior on opacity {

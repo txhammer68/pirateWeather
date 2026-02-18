@@ -1,5 +1,5 @@
 import QtQuick
-import org.kde.kirigami.platform
+import org.kde.kirigami as Kirigami
 
 Item {
   id:setup
@@ -21,7 +21,7 @@ Item {
     width:setup.width*.95
     //Layout.fillWidth : true
     wrapMode:Text.Wrap
-    color:Theme.textColor
+    color:Kirigami.Theme.textColor
     font.pointSize:14
     antialiasing : true
     text:setupText

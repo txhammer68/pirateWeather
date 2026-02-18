@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
-import org.kde.kirigami.platform
+import org.kde.kirigami as Kirigami
 
 Item {
     id: compactRep
@@ -22,7 +22,7 @@ Item {
 
         Text {
             text: isConfigured ? weatherAlert ? "⚠️":iconCode[weatherData.currently.icon]:"?"
-            color: Theme.textColor
+            color: Kirigami.Theme.textColor
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 14
             font.family: 'weathericons'
@@ -30,7 +30,7 @@ Item {
         }
         Text {
             text: isConfigured ? Math.round(weatherData.currently.temperature)+"° " : "--"
-            color: Theme.textColor
+            color: Kirigami.Theme.textColor
             verticalAlignment: Text.AlignVCenter
             font.pointSize: 13 //Theme.defaultFont.pointSize // Theme.fontSizeMedium// Theme.fontSizeSmall
             //fontSizeMode:  layoutType === 2 ? Text.FixedSize : Text.HorizontalFit

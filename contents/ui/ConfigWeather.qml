@@ -3,7 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
 import org.kde.plasma.configuration
-import org.kde.kirigami.platform
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasma5support as Plasma5Support
 
 
@@ -43,7 +43,7 @@ Item {
         anchors.right:parent.right
         anchors.margins:10
         text:Plasmoid.metaData.version
-        color:Theme.disabledTextColor
+        color:Kirigami.Theme.disabledTextColor
         font.pointSize:11
     }
 
@@ -63,21 +63,21 @@ Item {
 
         Text {
             text:"Settings for Pirate Weather"
-            color:Theme.textColor
+            color:Kirigami.Theme.textColor
             font.pointSize:16
         }
 
         Text {
             text:">>  Get API Key"
-            color:Theme.textColor
+            color:Kirigami.Theme.textColor
             font.pointSize:14
             topPadding:5
             MouseArea {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape:Qt.PointingHandCursor
-                onEntered: parent.color=Theme.hoverColor
-                onExited: parent.color=Theme.textColor
+                onEntered: parent.color=Kirigami.Theme.hoverColor
+                onExited: parent.color=Kirigami.Theme.textColor
                 onClicked: Qt.openUrlExternally("https://pirate-weather.apiable.io/")
             }
         }
@@ -86,7 +86,7 @@ Item {
             spacing:10
             Text {
                 text:"Enter API Key"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 topPadding:7
                 width:172
                 horizontalAlignment:Text.AlignLeft
@@ -94,7 +94,7 @@ Item {
             QQC2.TextField {
                 id: apiNum
                 placeholderText: "Enter API Key"
-                placeholderTextColor:Theme.disabledTextColor
+                placeholderTextColor:Kirigami.Theme.disabledTextColor
             }
         }
 
@@ -102,7 +102,7 @@ Item {
             spacing:10
             Text {
                 text:"Select Update Interval"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 topPadding:7
                 width:172
                 horizontalAlignment:Text.AlignLeft
@@ -120,13 +120,12 @@ Item {
             Text {
                 text:"Show Forecast"
                 width:172
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 horizontalAlignment:Text.AlignLeft
             }
             QQC2.CheckBox {
                 id:forecastSel
                 checked: true
-                //text: qsTr("Third")
             }
         }
 
@@ -134,7 +133,7 @@ Item {
             spacing:10
             Text {
                 text:"Select Measurment Units"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 topPadding:7
                 width:172
                 horizontalAlignment:Text.AlignLeft
@@ -153,7 +152,7 @@ Item {
             spacing:10
             Text {
                 text:"Enter Latitude Code"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 topPadding:7
                 width:172
                 horizontalAlignment:Text.AlignLeft
@@ -161,14 +160,14 @@ Item {
             QQC2.TextField {
                 id: latCode
                 placeholderText: "Enter Latitude Code"
-                placeholderTextColor:Theme.disabledTextColor
+                placeholderTextColor:Kirigami.Theme.disabledTextColor
             }
         }
         Row {
             spacing:10
             Text {
                 text:"Enter Longtitude Code"
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 topPadding:7
                 width:172
                 horizontalAlignment:Text.AlignLeft
@@ -176,7 +175,7 @@ Item {
             QQC2.TextField {
                 id: lonCode
                 placeholderText: "Enter Longtitude Code"
-                placeholderTextColor:Theme.disabledTextColor
+                placeholderTextColor:Kirigami.Theme.disabledTextColor
             }
         }
 
@@ -185,13 +184,13 @@ Item {
             Text {
                 text:"City"
                 width:172
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 horizontalAlignment:Text.AlignLeft
             }
             QQC2.TextField {
                 id:cityName
                 placeholderText: "Enter City Name"
-                placeholderTextColor:Theme.disabledTextColor
+                placeholderTextColor:Kirigami.Theme.disabledTextColor
             }
         }
 
@@ -200,13 +199,13 @@ Item {
             Text {
                 text:"Region"
                 width:172
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 horizontalAlignment:Text.AlignLeft
             }
             QQC2.TextField {
                 id:regionName
                 placeholderText: "Enter Region Name"
-                placeholderTextColor:Theme.disabledTextColor
+                placeholderTextColor:Kirigami.Theme.disabledTextColor
             }
         }
 
@@ -215,12 +214,12 @@ Item {
             width:120
             height:32
             color:"transparent"
-            border.color:apiNum.text.length > 1 ? Theme.linkColor:Theme.disabledTextColor
+            border.color:apiNum.text.length > 1 ? Kirigami.Theme.linkColor:Kirigami.Theme.disabledTextColor
             radius:6
 
             Text {
                 text:"Get Geo Codes"
-                color:apiNum.text.length > 1 ? Theme.textColor:Theme.disabledTextColor
+                color:apiNum.text.length > 1 ? Kirigami.Theme.textColor:Kirigami.Theme.disabledTextColor
                 anchors.centerIn:parent
             }
 
@@ -234,7 +233,7 @@ Item {
             }
             Text {
                 text:"Disable VPN First"
-                color:apiNum.text.length > 1 ? Theme.textColor:Theme.disabledTextColor
+                color:apiNum.text.length > 1 ? Kirigami.Theme.textColor:Kirigami.Theme.disabledTextColor
                 anchors.left:getGeoCodes.right
                 anchors.bottom:getGeoCodes.bottom
                 anchors.leftMargin:15
@@ -249,11 +248,11 @@ Item {
             width:120
             height:32
             color:"transparent"
-            border.color:updateAvail ? Theme.linkColor:Theme.disabledTextColor
+            border.color:updateAvail ? Kirigami.Theme.linkColor:Kirigami.Theme.disabledTextColor
             radius:6
             Text {
                 text:"Update Widget"
-                color:updateAvail ?  Theme.textColor:Theme.disabledTextColor
+                color:updateAvail ?  Kirigami.Theme.textColor:Kirigami.Theme.disabledTextColor
                 anchors.centerIn:parent
             }
             MouseArea {
@@ -267,7 +266,7 @@ Item {
             }
             Text {
                 text:updateMsg
-                color:Theme.textColor
+                color:Kirigami.Theme.textColor
                 font.pointSize:11
                 topPadding:5
                 visible:updateAvail
