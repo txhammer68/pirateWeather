@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
@@ -11,7 +12,7 @@ import org.kde.plasma.configuration
 
 PlasmoidItem {
     id: root
-    Plasmoid.configurationRequired:true
+
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
 
@@ -52,6 +53,7 @@ PlasmoidItem {
            if (apiKey.length > 0) {
             getData(weatherURL)
            }
+           else Plasmoid.configurationRequired=true
     }
 
     FontLoader {

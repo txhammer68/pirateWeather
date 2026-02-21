@@ -21,9 +21,7 @@ Item {
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
 
-    property string ipAddress:""
-    property string url1:"https://api.ipify.org/?format=json"
-    property string url2:"http://ip-api.com/json/"+ipAddress
+    property string url1:"https://ipinfo.io/json"
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
     property string updateCMD:"git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather/ && kpackagetool6 -t Plasma/Applet -u /tmp/pirateWeather/"
 
@@ -275,24 +273,21 @@ Item {
     }
 
     function getData(url) {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", url,false);
+        let xhr = new XMLHttpRequest()
+        xhr.open("GET", url,false)
+        xhr.responseType = 'json'
+        xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     if (url == url1) {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
-                        processIPAddress(data)
-                    }
-                    else if (url == url2) {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
+                        let response = xhr.response
+                        let data = response
                         processGeoData(data)
                     }
                     else {
-                        let response = xhr.responseText
-                        let data = JSON.parse(response)
+                        let response = xhr.response
+                        let data = response
                         processUpdateData(data)
                     }
                 }
@@ -320,25 +315,14 @@ Item {
         }
     }
 
-    function processIPAddress (data) {
-        if (typeof(data) != undefined) {
-            ipAddress=data.ip
-            if (ipAddress.length > 0) {
-                getData(url2)
-            }
-        }
-        return null
-    }
-
     function processGeoData(data) {
         if (typeof(data) != undefined) {
-            let lat = data.lat
-            latCode.text=lat
-            let lon = data.lon
-            lonCode.text=lon
+            let codes=data.loc.split(",",2)
+            latCode.text=codes[0]
+            lonCode.text=codes[1]
             let c1=data.city
             cityName.text=c1
-            let r1=data.regionName
+            let r1=data.region
             regionName.text=r1
         }
     return null
