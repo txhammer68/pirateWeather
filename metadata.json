@@ -15,7 +15,6 @@
         "Icon": "weather-clouds",
         "Id": "pirateWeather",
         "License": "GPL-3.0",
-        "Comment":"[Mark Twain] It ain't what you don't know that gets you into trouble. It's what you know for sure that just ain't so.",
         "Name": "Pirate Weather",
         "Version": "2.36",
         "Website": "https://github.com/txhammer68/pirateWeather"
