@@ -1,10 +1,10 @@
-pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import QtNetwork
 import org.kde.plasma.configuration
+import org.kde.notification
 
 // pirate weather widget
 // api docs https://pirateweather.net/en/latest/API/
@@ -28,13 +28,16 @@ PlasmoidItem {
     property string units:plasmoid.configuration.units
     property string windUnits:plasmoid.configuration.windUnits
 
+    property double currentVersion:Plasmoid.metaData.version
+    property double updateVersion:0.0
+    property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
+
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
     property var weatherData:{}
-    property string lastUpdate:"--"
     property bool weatherWarnings:false
-    property string alertText: ""
     property bool weatherAlert:false
-    property var iconCode:{"clear-day": '\uf00d',
+    property var iconCode:
+        {"clear-day": '\uf00d',
         "clear-night": '\uf02e',
         "rain":'\uf019',
         "snow":'\uf01b',
@@ -51,7 +54,8 @@ PlasmoidItem {
 
     Component.onCompleted:{
            if (apiKey.length > 0) {
-            getData(weatherURL)
+               getData(updateURL)
+               getData(weatherURL)
            }
            else Plasmoid.configurationRequired=true
     }
@@ -67,7 +71,7 @@ PlasmoidItem {
     Plasmoid.contextualActions: [
         PlasmaCore.Action {
             text: "Refresh Data"
-           icon.name: Qt.application.layoutDirection === Qt.RightToLeft ? "view-refresh" : "view-refresh"
+            icon.name: Qt.application.layoutDirection === Qt.RightToLeft ? "view-refresh" : "view-refresh"
             priority: Plasmoid.HighPriorityAction
             visible: true
             enabled: true
@@ -75,41 +79,138 @@ PlasmoidItem {
         }
     ]
 
-    function getData(url) {  // get json data sources
-        let xhr = new XMLHttpRequest()
-        //xhr.timeout = 5000;
-        xhr.open("GET",url,true) // set Method and File  true=asynchronous
-        xhr.responseType = 'json'
-        xhr.setRequestHeader('Content-Type', 'application/json')
+    Item {
+        Notification {
+            id: updateNotification
+            componentName: "plasma_workspace"
+            eventId: "notification"
+            title: "Update"
+            text: "Pirate Weather Update Available, Check Settings in Widget."
+            iconName: "task-due"
+            flags: Notification.CloseOnTimeout
+            urgency: Notification.DefaultUrgency
+            //timeout:5000
+            onClosed: console.log("Notification closed.")
+        }
+    }
+
+    function getData(url) {
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true); // Use asynchronous!
         xhr.onreadystatechange = function () {
-            if(xhr.readyState == 4) { // if request_status == DONE
-                if (xhr.status == 200) {
-                        let data = xhr.response
-                        processWeatherData(data)
-                    }
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                let data = JSON.parse(xhr.responseText);
+                 if (url == weatherURL) {
+                    processWeatherData (data)
                 }
+                else processUpdateData (data)
+            }
         }
         xhr.send();
     }
 
-    function processWeatherData (data) {
-        if (typeof(data) != undefined) {
-            if (data.latitude > 0) {
-                weatherData=data
-                weatherDataChanged ()
-                lastUpdate=Qt.formatTime(new Date(weatherData.currently.time*1000),"h:mm ap")
-                weatherWarnings=weatherData.alerts.length > 0  ? true:false // check if alert exists
-                alertText=weatherWarnings ? "⚠️   "+weatherData.alerts[0].title : ""
-                isConfigured=true
-                Plasmoid.configurationRequired=false
-                weatherTimer.restart()
-            }
-            else  {
-                isConfigured=false
-                lastUpdate=="NA"
-            }
+    function processUpdateData (data) {
+        updateVersion=data.KPlugin.Version
+        if (updateVersion > currentVersion) {
+            updateNotification.sendEvent()
         }
-       return null
+    }
+
+    function processWeatherData (data) {
+        if (data) {
+            let hourly=[]
+            let daily=[]
+            let array={}
+            let h1={}
+            let d1={}
+            let c1={
+                lastUpdate:Qt.formatTime(new Date(data.currently.time*1000),"h:mm ap"),
+                apparentTemperature:Math.round(data.currently.apparentTemperature)+"°",
+                humidity:Math.round(data.currently.humidity*100)+"%",
+                windBearing:degToCompass(data.currently.windBearing),
+                windGust:data.currently.windGust != null ? Math.round(data.currently.windGust):0,
+                windSpeed:Math.round(data.currently.windSpeed),
+                icon:"../icons/"+data.currently.icon+".svg",
+                panelIcon:data.currently.icon,
+                temp:Math.round(data.currently.temperature)+"°",
+                dewPoint:Math.round(data.currently.dewPoint)+"°",
+                visibility:Math.round(data.currently.visibility),
+                uvIndex:data.currently.uvIndex,
+                ozone:data.currently.ozone,
+                conditions:data.currently.summary,
+                summary:data.hourly.summary,
+                warnings:data.alerts.length > 0  ? true:false, // check if alert exists
+                alertText:data.alerts.length > 0 ? "⚠️ "+data.alerts[0].title : "",
+                weatherAlertsURL:data.alerts.length > 0 ? data.alerts[0].uri :"",
+                weatherAlertsDesc:data.alerts.length > 0 ? data.alerts[0].description : ""
+            }
+
+            for (let x=0;x<data.hourly.data.length;x++) {
+                h1={time:Qt.formatTime(new Date(data.hourly.data[x].time*1000),"h:mm ap"),
+                    icon:"../icons/"+data.hourly.data[x].icon+".svg",
+                    temp:Math.round(data.hourly.data[x].temperature)+"°",
+                    precip:Math.round(data.hourly.data[x].precipProbability*100/10)*10+"%"}
+                    hourly.push(h1)
+            }
+
+            for (let x=0;x<data.daily.data.length;x++) {
+                d1={time:Qt.formatDate(new Date(data.daily.data[x].time*1000),"ddd"),
+                    icon:"../icons/"+data.daily.data[x].icon+".svg",
+                    lowTemp:Math.round(data.daily.data[x].temperatureLow)+"°",
+                    highTemp:Math.round(data.daily.data[x].temperatureHigh)+"°",
+                    precip:Math.round(data.daily.data[x].precipProbability*100/10)*10+"%"}
+                    daily.push(d1)
+            }
+
+            array={currently:c1,hourly:hourly,daily:daily}
+            weatherData=array
+            weatherWarnings=weatherData.currently.warnings
+            isConfigured=true
+            Plasmoid.configurationRequired=false
+            weatherTimer.restart()
+        }
+        else  {
+            let c1={
+                lastUpdate:"NA",
+                apparentTemperature:"--",
+                humidity:"--",
+                windBearing:"--",
+                windGust:0,
+                icon:"../icons/na.png",
+                panelIcon:"?",
+                temp:"--",
+                dewPoint:"--",
+                visibility:"--",
+                uvIndex:"--",
+                ozone:"--",
+                conditions:"No Data",
+                summary:"No Data check settings or network connection",
+                warnings:false,
+                alertText:"",
+                weatherAlertsURL:"--",
+                weatherAlertsDesc:"--"
+            }
+            for (let x=0;x<7;x++) {
+                h1={time:"--",
+                    icon:"../icons/na.png",
+                    temp:"--",
+                    precip:"--"}
+                    hourly.push(h1)
+            }
+
+            for (let x=0;x<7;x++) {
+                d1={time:"--",
+                    icon:"../icons/na.png",
+                    lowTemp:"--",
+                    highTemp:"--",
+                    precip:"--"}
+                    daily.push(d1)
+            }
+            array={currently:c1,hourly:hourly,daily:daily}
+            weatherData=array
+            weatherWarnings=false
+            isConfigured=false
+        }
     }
 
     function degToCompass(num) {
@@ -140,6 +241,7 @@ PlasmoidItem {
              return "Very High" }
         else if (weatherData.currently.uvIndex >= 11 ) {
              return "Extreme" }
+        else return "Unknown"
     }
 
     Timer {
@@ -162,12 +264,12 @@ PlasmoidItem {
             getData(weatherURL)
         }
     }
-
     Connections {
-        target:NetworkInformation
-        onReachabilityChanged: {
-            if (NetworkInformation.reachability == 4) {
-                suspendTimer.start()
+        target: NetworkInformation
+        // Arguments must be explicitly listed
+        function onReachabilityChanged(newReachability) {
+            if (newReachability === NetworkInformation.Online) {
+                suspendTimer.start();
             }
         }
     }

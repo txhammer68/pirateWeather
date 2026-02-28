@@ -6,7 +6,7 @@ import org.kde.plasma.plasmoid
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth:570
+    Layout.preferredWidth:560
     Layout.preferredHeight:420
     Layout.minimumWidth:500
     Layout.maximumWidth:600
@@ -40,13 +40,33 @@ Item {
     Component {
         id: configRepresentation
 
+
+        Rectangle {
+            width:248
+            height:28
+            color:"transparent"
+            radius:6
+            antialiasing : true
+            border.color:Kirigami.Theme.disabledTextColor
+
         Text {
             text:"Configure Weather"
             color:Kirigami.Theme.textColor
+            anchors.centerIn:parent
             font.pointSize:16
-            bottomPadding:70
+            //bottomPadding:70
+        }
+        MouseArea {
+            anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
+            hoverEnabled:true
+            onEntered: parent.border.color=Kirigami.Theme.linkColor
+            onExited:parent.border.color=Kirigami.Theme.textColor
+            onClicked:plasmoid.internalAction("configure").trigger()
+            //onClicked:plasmoid.action("configure").trigger() //plasmoid.action("configure").trigger()  //plasmoid.configuration[0]
         }
         // plasmoid.configuration[0], can configure different sections of config
+      }
     }
 
     Component {
@@ -58,7 +78,7 @@ Item {
 
             ToolTip {
                 id: wtips
-                text: weatherWarnings ?  weatherData.alerts[0].description : ""
+                text: weatherData.currently.warnings ?  weatherData.currently.weatherAlertsDesc : ""
                 visible: false
                 delay:1000
                 x:story.x+80
@@ -80,7 +100,7 @@ Item {
             }
 
             Text {
-                text: isConfigured ? lastUpdate : "NA"
+                text: weatherData.currently.lastUpdate
                 color:Kirigami.Theme.disabledTextColor
                 antialiasing : true
                 font.pointSize:10
@@ -121,7 +141,7 @@ Item {
 
                 Image {
                     id:iconCode
-                    source:isConfigured ? "../icons/"+weatherData.currently.icon+".svg" : "../icons/na.png"
+                    source:weatherData.currently.icon
                     width:48
                     height:48
                     smooth:true
@@ -133,7 +153,7 @@ Item {
                     id:temp
                     anchors.top:iconCode.top
                     anchors.topMargin:10
-                    text:isConfigured ? "  "+Math.round(weatherData.currently.temperature)+"° " : "NA"
+                    text:weatherData.currently.temp
                     color:Kirigami.Theme.textColor
                     font.pointSize:20
                     antialiasing : true
@@ -142,7 +162,7 @@ Item {
                 Text {
                     id:summary
                     anchors.bottom:temp.bottom
-                    text:isConfigured ? weatherData.currently.summary : "--"
+                    text:weatherData.currently.conditions
                     color:Kirigami.Theme.textColor
                     font.pointSize:20
                     antialiasing : true
@@ -160,7 +180,7 @@ Item {
 
                 Text {
                     id:story
-                    text:isConfigured ?  weatherWarnings ? alertText : weatherData.hourly.summary : "No Data,Check Settings or Network Connection,Refresh Data"
+                    text:weatherData.currently.warnings ? weatherData.currently.alertText : weatherData.currently.summary
                     fontSizeMode:Text.HorizontalFit
                     minimumPixelSize: 9
                     Layout.fillWidth : true
@@ -174,10 +194,10 @@ Item {
                     MouseArea {
                         id: mouseArea
                         anchors.fill: parent
-                        cursorShape: weatherWarnings ? Qt.PointingHandCursor : Qt.ArrowCursor
-                        hoverEnabled: weatherWarnings ? true : false
+                        cursorShape: weatherData.currently.warnings ? Qt.PointingHandCursor : Qt.ArrowCursor
+                        hoverEnabled: weatherData.currently.warnings ? true : false
                         onEntered:{
-                            if (weatherWarnings) {
+                            if (weatherData.currently.warnings) {
                                 parent.color=Kirigami.Theme.linkColor
                                 wtips.visible=true
                             }
@@ -186,7 +206,7 @@ Item {
                             }
                         }
                         onExited:{
-                            if (weatherWarnings) {
+                            if (weatherData.currently.warnings) {
                                 parent.color=Kirigami.Theme.textColor
                                 wtips.visible=false
                             }
@@ -195,7 +215,7 @@ Item {
                             }
                         }
                         onClicked: {
-                            Qt.openUrlExternally(weatherData.alerts[0].uri)
+                            Qt.openUrlExternally(weatherData.currently.weatherAlertsURL)
                         }
                     }
                 }
@@ -244,7 +264,7 @@ Item {
                             width:5
                         }
                         Text {
-                            text:Math.round(weatherData.currently.apparentTemperature)+"°"
+                            text:weatherData.currently.apparentTemperature
                             color:Kirigami.Theme.textColor
                             font.pointSize:14
                             antialiasing : true
@@ -261,7 +281,7 @@ Item {
                         }
 
                         Text {
-                            text:Math.round(weatherData.currently.humidity*100)+"%"
+                            text:weatherData.currently.humidity
                             color:Kirigami.Theme.textColor
                             font.pointSize:14
                             antialiasing : true
@@ -278,7 +298,7 @@ Item {
                             bottomPadding:5
                         }
                         Text {
-                            text:(weatherData.currently.windGust > 0 && weatherData.currently.windGust > weatherData.currently.windSpeed) ? degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed) + " to "+Math.round(weatherData.currently.windGust) + windUnits : degToCompass(weatherData.currently.windBearing)+" at "+Math.round(weatherData.currently.windSpeed)+ windUnits
+                            text:weatherData.currently.windGust > 0 && weatherData.currently.windGust > weatherData.currently.windSpeed ? weatherData.currently.windBearing+" at "+weatherData.currently.windSpeed + " to "+weatherData.currently.windGust +" "+ windUnits : weatherData.currently.windBearing+" at "+weatherData.currently.windSpeed+" "+windUnits
                             color:Kirigami.Theme.textColor
                             font.pointSize:14
                             antialiasing : true
@@ -340,7 +360,7 @@ Item {
                             width:5
                         }
                         Text {
-                            text:Math.round(weatherData.currently.dewPoint)+"°"
+                            text:weatherData.currently.dewPoint
                             color:Kirigami.Theme.textColor
                             font.pointSize:14
                             antialiasing : true
@@ -355,7 +375,7 @@ Item {
                             width:5
                         }
                         Text {
-                            text:Math.round(weatherData.currently.visibility) + (units=="us" ? "mi":"km")
+                            text:weatherData.currently.visibility + (units=="us" ? "mi":"km")
                             color:Kirigami.Theme.textColor
                             font.pointSize:14
                             antialiasing : true
@@ -478,7 +498,7 @@ Item {
 
                     Text {
                         id:timeofDay
-                        text:Qt.formatTime(new Date(weatherData.hourly.data[index].time*1000))
+                        text:weatherData.hourly[index].time
                         color:Kirigami.Theme.textColor
                         Layout.alignment:Qt.AlignHCenter
                         font.pointSize:10
@@ -487,7 +507,7 @@ Item {
                     }
 
                     Image {
-                        source:"../icons/"+weatherData.hourly.data[index].icon+".svg"
+                        source:weatherData.hourly[index].icon
                         width:38
                         height:38
                         Layout.alignment:Qt.AlignHCenter
@@ -498,7 +518,7 @@ Item {
                     }
 
                     Text {
-                        text:Math.round(weatherData.hourly.data[index].precipProbability*100/10)*10+"%"
+                        text:weatherData.hourly[index].precip
                         color:Kirigami.Theme.textColor
                         Layout.alignment:Qt.AlignHCenter
                         font.pointSize:12
@@ -506,7 +526,7 @@ Item {
                     }
 
                     Text {
-                        text:Math.round(weatherData.hourly.data[index].temperature)+"°"
+                        text:weatherData.hourly[index].temp
                         color:Kirigami.Theme.textColor
                         Layout.alignment:Qt.AlignHCenter
                         font.pointSize:12
@@ -523,7 +543,7 @@ Item {
                     Layout.alignment:Qt.AlignHCenter
 
                     Text {
-                        text:Qt.formatDate(new Date(weatherData.daily.data[index].time*1000)," ddd ")
+                        text:weatherData.daily[index].time
                         color:Kirigami.Theme.textColor
                         font.pointSize:12
                         font.bold:true
@@ -532,7 +552,7 @@ Item {
                     }
 
                     Image {
-                        source:"../icons/"+weatherData.daily.data[index].icon+".svg"
+                        source:weatherData.daily[index].icon
                         width:36
                         height:36
                         sourceSize.height:height
@@ -543,7 +563,7 @@ Item {
                     }
 
                     Text {
-                        text:Math.round(weatherData.daily.data[index].precipProbability*100/10)*10+"%"
+                        text:weatherData.daily[index].precip
                         color:Kirigami.Theme.textColor
                         Layout.alignment:Qt.AlignHCenter
                         font.pointSize:12
@@ -551,7 +571,7 @@ Item {
                     }
 
                     Text {
-                        text:Math.round(weatherData.daily.data[index].temperatureLow)+"° | "+Math.round(weatherData.daily.data[index].temperatureHigh)+"°"
+                        text:weatherData.daily[index].lowTemp+" | "+weatherData.daily[index].highTemp
                         color:Kirigami.Theme.textColor
                         Layout.alignment:Qt.AlignHCenter
                         font.pointSize:12
@@ -565,7 +585,7 @@ Item {
                 anchors.top:viewForecast.bottom
                 anchors.topMargin:15
                 anchors.left:parent.left
-                anchors.leftMargin:10
+                anchors.leftMargin:15
                 width:parent.width*.96
                 height:128
                 visible:showForecast
@@ -585,7 +605,7 @@ Item {
                     boundsBehavior: Flickable.StopAtBounds
                     clip:true
                     interactive:true
-                    model:weatherData.hourly.data
+                    model:weatherData.hourly
                     onModelChanged:{
                         hourlyForecast.positionViewAtBeginning()
                         dailyForecast.visible=false
@@ -648,7 +668,7 @@ Item {
                 anchors.top:viewForecast.bottom
                 anchors.left:parent.left
                 anchors.topMargin:15
-                anchors.leftMargin:10
+                anchors.leftMargin:15
                 width:parent.width*.98
                 height:128
                 visible:showForecast

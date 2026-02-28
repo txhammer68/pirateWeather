@@ -1,8 +1,8 @@
 import QtQuick
-import QtQuick.Layouts
+//import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
-import org.kde.plasma.configuration
+//import org.kde.plasma.configuration
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasma5support as Plasma5Support
 
@@ -20,6 +20,7 @@ Item {
     property alias cfg_lonCode: lonCode.text
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
+    property string title:"Config Settings"
 
     property string url1:"https://ipinfo.io/json"
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
@@ -241,6 +242,7 @@ Item {
 
         Row {
             spacing:10
+            visible:updateAvail
         Rectangle {
             id:updateWidget
             width:120
@@ -275,19 +277,15 @@ Item {
     function getData(url) {
         let xhr = new XMLHttpRequest()
         xhr.open("GET", url,false)
-        xhr.responseType = 'json'
-        xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
+                    let response = xhr.responseText
+                    let data = JSON.parse(response)
                     if (url == url1) {
-                        let response = xhr.response
-                        let data = response
                         processGeoData(data)
                     }
                     else {
-                        let response = xhr.response
-                        let data = response
                         processUpdateData(data)
                     }
                 }
@@ -299,19 +297,19 @@ Item {
     function formatMeasUnits () {
         if (measSel.currentIndex == 0) {
             cfg_units="ca"
-            cfg_windUnits=" kmh"
+            cfg_windUnits="kmh"
         }
         else if (measSel.currentIndex == 1) {
             cfg_units="si"
-            cfg_windUnits=" mps"
+            cfg_windUnits="mps"
         }
         else if (measSel.currentIndex == 2) {
             cfg_units="uk"
-            cfg_windUnits=" mph"
+            cfg_windUnits="mph"
         }
         else if (measSel.currentIndex == 3) {
             cfg_units="us"
-            cfg_windUnits=" mph"
+            cfg_windUnits="mph"
         }
     }
 
