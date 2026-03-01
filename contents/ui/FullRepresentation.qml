@@ -181,11 +181,10 @@ Item {
                 Text {
                     id:story
                     text:weatherData.currently.warnings ? weatherData.currently.alertText : weatherData.currently.summary
-                    fontSizeMode:Text.HorizontalFit
-                    minimumPixelSize: 9
                     Layout.fillWidth : true
                     wrapMode:Text.WordWrap
                     maximumLineCount: 2
+                    elide: Text.ElideRight
                     width:parent.width*.95
                     color:Kirigami.Theme.textColor
                     font.pointSize:14
