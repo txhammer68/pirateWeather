@@ -36,6 +36,9 @@ PlasmoidItem {
     property var weatherData:{}
     property bool weatherWarnings:false
     property bool weatherAlert:false
+    property string notificationTitle:""
+    property string notificationMsg:""
+    property string notificationIcon:""
     property var iconCode:
         {"clear-day": '\uf00d',
         "clear-night": '\uf02e',
@@ -53,18 +56,15 @@ PlasmoidItem {
     }
 
     Component.onCompleted:{
-           if (apiKey.length > 0) {
+               weatherURL.length > 125 ? getData(weatherURL):Plasmoid.configurationRequired=true
                autoUpdate ? getData(updateURL):""
-               getData(weatherURL)
            }
-           else Plasmoid.configurationRequired=true
-    }
 
     FontLoader {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
-    onWeatherURLChanged:getData(weatherURL)
+    onWeatherURLChanged:  weatherURL.length > 125 ? getData(weatherURL):Plasmoid.configurationRequired=true
     onUpdateIntervalChanged: weatherTimer.restart()
     onWeatherWarningsChanged:weatherWarnings ? weatherAlert=true : weatherAlert=false
 
@@ -84,9 +84,9 @@ PlasmoidItem {
             id: updateNotification
             componentName: "plasma_workspace"
             eventId: "notification"
-            title: "Update"
-            text: "Pirate Weather Update Available, Check Settings in Widget."
-            iconName: "task-due"
+            title: notificationTitle
+            text: notificationMsg
+            iconName: notificationIcon
             flags: Notification.CloseOnTimeout
             urgency: Notification.DefaultUrgency
             //timeout:5000
@@ -95,23 +95,65 @@ PlasmoidItem {
     }
 
     function getData(url) {
-        let xhr = new XMLHttpRequest()
-        xhr.open("GET", url, true)
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        // Set a timeout (10 seconds) so the widget doesn't hang on a dead connection
+        xhr.timeout = 10000;
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                let data = JSON.parse(xhr.responseText)
-                 if (url == weatherURL) {
-                    processWeatherData (data)
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    try {
+                        let data = JSON.parse(xhr.responseText);
+                        if (url === weatherURL) {
+                            processWeatherData (data)
+                        } else if (url === updateURL) {
+                            processUpdateData(data)
+                        }
+                    } catch (e) {
+                        notificationTitle="Pirate Weather Error"
+                        notificationMsg="Failed to parse JSON Data"
+                        notificationIcon="dialog-error"
+                        updateNotification.sendEvent()
+                        console.error("Failed to parse JSON from:", url, e);
+                    }
+                } else {
+                    // Handle API Down or Network Error (404, 500, etc.)
+                    notificationTitle="Pirate Weather Warning"
+                    notificationMsg="API Key Error:"
+                    notificationIcon="dialog-error"
+                    updateNotification.sendEvent()
+                    console.warn("API Error:", xhr.status, "URL:", url);
+                    isConfigured=false
+                    Plasmoid.configurationRequired = true
                 }
-                else processUpdateData (data)
             }
-        }
+        };
+
+        xhr.ontimeout = function () {
+            notificationTitle="Pirate Weather Warning"
+            notificationMsg="Request timed out, check network connection"
+            notificationIcon="dialog-error"
+            updateNotification.sendEvent()
+            console.error("Request timed out for:", url);
+        };
+
+        xhr.onerror = function () {
+            notificationTitle="Pirate Weather Warning"
+            notificationMsg="Request timed out, check network connection"
+            notificationIcon="dialog-error"
+            updateNotification.sendEvent()
+            console.error("Network error occurred while fetching:", url);
+        };
+
         xhr.send();
     }
 
     function processUpdateData (data) {
         updateVersion=data.KPlugin.Version
         if (updateVersion > currentVersion) {
+            notificationTitle="Pirate Weather Update"
+            notificationMsg="Pirate Weather Update Available, Check Settings in Widget."
+            notificationIcon="task-due"
             updateNotification.sendEvent()
         }
     }

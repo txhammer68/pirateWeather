@@ -1,8 +1,6 @@
 import QtQuick
-//import QtQuick.Layouts
 import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
-//import org.kde.plasma.configuration
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasma5support as Plasma5Support
 
@@ -21,6 +19,19 @@ Item {
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
     property alias cfg_chkBoxUpdate:chkBoxUpdate.checked
+
+    property string cfg_apiKeyDefault
+    property string cfg_updateIntervalDefault
+    property bool cfg_forecastSelDefault
+    property int cfg_idxDefault
+    property string cfg_latCodeDefault
+    property string cfg_lonCodeDefault
+    property string cfg_unitsDefault
+    property string cfg_windUnitsDefault
+    property bool cfg_chkBoxUpdateDefault
+
+    property string cfg_cityNameDefault
+    property string cfg_regionNameDefault
     property string title:"Config Settings"
 
     property string url1:"https://ipinfo.io/json"
@@ -63,6 +74,7 @@ Item {
         }
 
         Text {
+            id:ttl
             text:"Settings for Pirate Weather"
             color:Kirigami.Theme.textColor
             font.pointSize:16
