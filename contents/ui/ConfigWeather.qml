@@ -20,6 +20,7 @@ Item {
     property alias cfg_lonCode: lonCode.text
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
+    property alias cfg_chkBoxUpdate:chkBoxUpdate.checked
     property string title:"Config Settings"
 
     property string url1:"https://ipinfo.io/json"
@@ -32,8 +33,9 @@ Item {
     property string updateMsg:"Updated Version Ready "+"("+updateVersion+")"
 
     Component.onCompleted:{
-        getData(updateURL)
         measSel.currentIndex=cfg_idx
+        chkBoxUpdate.checked=cfg_chkBoxUpdate
+        chkBoxUpdate.checked ? getData(updateURL):""
     }
 
     Text {
@@ -240,9 +242,16 @@ Item {
             }
         }
 
+        QQC2.CheckBox{
+            id: chkBoxUpdate
+            checked: true
+            text: qsTr("Check for Updates")
+            topPadding:10
+        }
+
         Row {
             spacing:10
-            visible:updateAvail
+            visible:(updateAvail && chkBoxUpdate.checked)
         Rectangle {
             id:updateWidget
             width:120
