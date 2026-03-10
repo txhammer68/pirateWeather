@@ -19,6 +19,8 @@ Item {
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
     property alias cfg_chkBoxUpdate:chkBoxUpdate.checked
+    property string url2
+    property string cfg_api_url
 
     property string cfg_apiKeyDefault
     property string cfg_updateIntervalDefault
@@ -46,8 +48,11 @@ Item {
     Component.onCompleted:{
         measSel.currentIndex=cfg_idx
         chkBoxUpdate.checked=cfg_chkBoxUpdate
+        url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
         chkBoxUpdate.checked ? getData(updateURL):""
     }
+
+    onUrl2Changed:cfg_api_url=url2
 
     Text {
         id:appVer
@@ -343,6 +348,7 @@ Item {
             cityName.text=c1
             let r1=data.region
             regionName.text=r1
+            url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
         }
     return null
     }

@@ -32,7 +32,8 @@ PlasmoidItem {
     property double updateVersion:0.0
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
 
-    property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
+    property string weatherURL:plasmoid.configuration.api_url
+    //property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
     property var weatherData:{}
     property bool weatherWarnings:false
     property bool weatherAlert:false
