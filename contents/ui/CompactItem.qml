@@ -21,7 +21,7 @@ Item {
         spacing: 0
 
         Text {
-            text: isConfigured ? weatherData.currently.warnings ? "⚠️":iconCode[weatherData.currently.panelIcon]:"?"
+            text: isConfigured ? weatherAlert ? "⚠️":iconCode[weatherData.currently.panelIcon]:"?"
             color: Kirigami.Theme.textColor
             //verticalAlignment: Text.AlignVCenter
             font.pointSize: 14
