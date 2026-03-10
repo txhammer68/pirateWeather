@@ -5,48 +5,48 @@
       http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name=""/>
   <group name="Settings">
-    <entry name="apiKey" type="string">
+    <entry name="apiKey" type="String">
       <label>Enter API Key</label>
-      <attribute name="apiKey" use="required" type="string"/>
+      <attribute name="apiKey" use="required" type="String"/>
     </entry>
-    <entry name="idx" type="int">
+    <entry name="idx" type="Int">
       <label>Select Measurement Units</label>
-      <attribute name="idx" use="required" type="int"/>
+      <attribute name="idx" use="required" type="Int"/>
       <default></default>
     </entry>
-    <entry name="units" type="string">
+    <entry name="units" type="String">
       <label>Select Measurement Units</label>
-      <attribute name="units" use="required" type="string"/>
+      <attribute name="units" use="required" type="String"/>
       <default></default>
     </entry>
-    <entry name="windUnits" type="string">
+    <entry name="windUnits" type="String">
       <label>Select Measurement Units</label>
-      <attribute name="windUnits" use="required" type="string"/>
+      <attribute name="windUnits" use="required" type="String"/>
       <default></default>
     </entry>
-    <entry name="updateInterval" type="int">
+    <entry name="updateInterval" type="Int">
       <label>Enter Update Interval</label>
-      <attribute name="updateInterval" use="required" type="int"/>
+      <attribute name="updateInterval" use="required" type="Int"/>
       <default>15</default>
     </entry>
-    <entry name="forecastSel" type="bool">
+    <entry name="forecastSel" type="Bool">
       <label>Show Forecast</label>
-      <attribute name="forecastSel" use="required" type="bool"/>
+      <attribute name="forecastSel" use="required" type="Bool"/>
       <default>true</default>
     </entry>
-    <entry name="lonCode" type="string">
+    <entry name="lonCode" type="String">
       <label>Enter Longitude Code</label>
-      <attribute name="lonCode" use="required" type="string"/>
+      <attribute name="lonCode" use="required" type="String"/>
     </entry>
-    <entry name="latCode" type="string">
+    <entry name="latCode" type="String">
       <label>Enter Latitude Code</label>
-      <attribute name="latCode" use="required" type="string"/>
+      <attribute name="latCode" use="required" type="String"/>
     </entry>
-    <entry name="cityName" type="string">
-      <attribute name="cityName" use="required" type="string"/>
+    <entry name="cityName" type="String">
+      <attribute name="cityName" use="required" type="String"/>
     </entry>
-    <entry name="regionName" type="string">
-      <attribute name="regionName" use="required" type="string"/>
+    <entry name="regionName" type="String">
+      <attribute name="regionName" use="required" type="String"/>
     </entry>
     <entry name="chkBoxUpdate" type="Bool">
       <attribute name="chkBoxUpdate" type="Bool"/>
