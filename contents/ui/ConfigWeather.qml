@@ -53,6 +53,9 @@ Item {
     }
 
     onUrl2Changed:cfg_api_url=url2
+    onCfg_apiKeyChanged:url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
+    onCfg_latCodeChanged:url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
+    onCfg_lonCodeChanged:url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
 
     Text {
         id:appVer
