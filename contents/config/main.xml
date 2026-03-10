@@ -48,6 +48,9 @@
     <entry name="regionName" type="String">
       <attribute name="regionName" use="required" type="String"/>
     </entry>
+    <entry name="api_url" type="string">
+      <attribute name="api_url" type="String"/>
+    </entry>
     <entry name="chkBoxUpdate" type="Bool">
       <attribute name="chkBoxUpdate" type="Bool"/>
       <default>true</default>
