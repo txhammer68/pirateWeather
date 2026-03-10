@@ -48,5 +48,9 @@
     <entry name="regionName" type="string">
       <attribute name="regionName" use="required" type="string"/>
     </entry>
+    <entry name="chkBoxUpdate" type="Bool">
+      <attribute name="chkBoxUpdate" type="Bool"/>
+      <default>true</default>
+    </entry>
   </group>
 </kcfg>
