@@ -36,4 +36,4 @@ kpackagetool6 --remove pirateWeather --type Plasma/Applet
   * Logout after update for update to be applied
   * Verify settings/config after login
   * You can resize popup to get proper fit
-  * hourly forecast is scrollable w/ mouse wheel
+  * hourly forecast is scrollable w/ mouse wheel. 
