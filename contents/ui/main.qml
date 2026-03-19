@@ -16,6 +16,9 @@ PlasmoidItem {
     compactRepresentation:CompactRepresentation { }
     fullRepresentation:FullRepresentation { }
 
+    toolTipMainText: weatherData.currently.warnings ?  weatherData.currently.alertText : weatherData.currently.summary
+    toolTipSubText:weatherData.currently.warnings ?  weatherData.currently.weatherAlertsDesc : ""
+
     property bool isConfigured:false
     property string apiKey: plasmoid.configuration.apiKey
     property int updateInterval: plasmoid.configuration.updateInterval
