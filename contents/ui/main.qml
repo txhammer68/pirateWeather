@@ -60,7 +60,7 @@ PlasmoidItem {
     }
 
     Component.onCompleted:{
-               weatherURL.length > 125 ? getData(weatherURL):Plasmoid.configurationRequired=true
+               weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
                autoUpdate ? getData(updateURL):""
            }
 
@@ -68,7 +68,7 @@ PlasmoidItem {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
-    onWeatherURLChanged:  weatherURL.length > 125 ? getData(weatherURL):Plasmoid.configurationRequired=true
+    onWeatherURLChanged:  weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
     onUpdateIntervalChanged: weatherTimer.restart()
     onWeatherWarningsChanged:weatherWarnings ? weatherAlert=true : weatherAlert=false
 
