@@ -1,3 +1,8 @@
+<p align="center">
+    <img src="https://img.shields.io/badge/KDE_Plasma-6.0+-blue?style=for-the-badge&logo=kde" alt="KDE Plasma 6">
+    <img src="https://img.shields.io/badge/license-GPL--3.0-green?style=for-the-badge" alt="License">
+</p>
+
 # pirateWeather
 KDE Plasma 6 Plasmoid Weather Widget using Pirate Weather A Free, Flexable, and Open-Source Weather API <br>
 Pirate Weather was developed on the closure of Dark Sky Weather providing an alternate open source option for weather data <br>
