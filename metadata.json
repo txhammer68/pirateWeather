@@ -14,7 +14,7 @@
         ],
         "Icon": "weather-clouds",
         "Id": "pirateWeather",
-        "License": "GPL-3.0",
+        "License": "GPL-2.0",
         "Name": "Pirate Weather",
         "Version": "2.52",
         "Website": "https://github.com/txhammer68/pirateWeather"
