@@ -36,6 +36,7 @@ PlasmoidItem {
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
 
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
+
     property var weatherData:{}
     property bool weatherWarnings:false
     property bool weatherAlert:false
@@ -67,7 +68,7 @@ PlasmoidItem {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
-    onWeatherURLChanged:  weatherURL.length > 1 ? getData(weatherURL):Plasmoid.configurationRequired=true
+    onWeatherURLChanged:  weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
     onUpdateIntervalChanged: weatherTimer.restart()
     onWeatherWarningsChanged:weatherWarnings ? weatherAlert=true : weatherAlert=false
 
@@ -168,50 +169,18 @@ PlasmoidItem {
             let array={}
             let h1={}
             let d1={}
-            if ( (data.currently.humidity > 200 || data.currently.humidity < 0)
-                || (data.currently.windGust != null && data.currently.windGust > 300 || data.currently.windGust < 0)
-                || (data.currently.windSpeed > 300 || data.currently.windSpeed < 0)
-                || (data.currently.temperature > 200 || data.currently.temperature < -200)
-                || (data.currently.dewPoint > 200 || data.currently.dewPoint < -200)
-                || (data.currently.visibility > 200 || data.currently.visibility < 0)
-                || (data.currently.uvIndex > 12 || data.currently.uvIndex < 0)
-                || (data.currently.ozone > 502 || data.currently.ozone < 0) ) {
-                    let c1={
-                        lastUpdate:"NA",
-                        apparentTemperature:"--",
-                        humidity:"--",
-                        windBearing:"--",
-                        windGust:0,
-                        icon:"../icons/na.png",
-                        panelIcon:"NA",
-                        temp:"--",
-                        dewPoint:"--",
-                        visibility:"--",
-                        uvIndex:"--",
-                        ozone:"--",
-                        conditions:"Data API Error",
-                        summary:"Data API Error, check API Provider",
-                        warnings:false,
-                        alertText:"",
-                        weatherAlertsURL:"--",
-                        weatherAlertsDesc:"--"
-                    }
-                    console.error("Data API Error w/ Pirate Weather")
-                    console.error(weatherURL)
-                }
-                else {
             let c1={
                 lastUpdate:Qt.formatTime(new Date(data.currently.time*1000),"h:mm ap"),
-                apparentTemperature:Math.round(data.currently.apparentTemperature)+"°",
-                humidity:Math.round(data.currently.humidity*100)+"%",
+                apparentTemperature:(data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.apparentTemperature)+"°",
+                humidity: (data.currently.humidity > 200 || data.currently.humidity < 0) ? "NA" : Math.round(data.currently.humidity*100)+"%",
                 windBearing:degToCompass(data.currently.windBearing),
-                windGust:data.currently.windGust != null ? Math.round(data.currently.windGust):0,
-                windSpeed:Math.round(data.currently.windSpeed),
+                windGust:(data.currently.windGust === null && (data.currently.windGust > 300 || data.currently.windGust < 0)) ? "NA" : Math.round(data.currently.windGust),
+                windSpeed: (data.currently.windSpeed === null && (data.currently.windSpeed > 300 || data.currently.windSpeed < 0)) ? "NA":Math.round(data.currently.windSpeed),
                 icon:"../icons/"+data.currently.icon+".svg",
                 panelIcon:data.currently.icon,
-                temp:Math.round(data.currently.temperature)+"°",
-                dewPoint:Math.round(data.currently.dewPoint)+"°",
-                visibility:Math.round(data.currently.visibility),
+                temperature: (data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.temperature)+"°",
+                dewPoint: (data.currently.dewPoint > 200 || data.currently.dewPoint < -200) ? "NA":Math.round(data.currently.dewPoint)+"°",
+                visibility: (data.currently.visibility > 200 || data.currently.visibility < 0) ? "NA":Math.round(data.currently.visibility),
                 uvIndex:data.currently.uvIndex,
                 ozone:data.currently.ozone,
                 conditions:data.currently.summary,
@@ -245,7 +214,6 @@ PlasmoidItem {
             isConfigured=true
             Plasmoid.configurationRequired=false
             weatherTimer.restart()
-    }
         }
         else  {
             let c1={
@@ -256,7 +224,7 @@ PlasmoidItem {
                 windGust:0,
                 icon:"../icons/na.png",
                 panelIcon:"?",
-                temp:"--",
+                temperature:"--",
                 dewPoint:"--",
                 visibility:"--",
                 uvIndex:"--",
@@ -300,32 +268,33 @@ PlasmoidItem {
     }
 
     function calcAQI () {
-        if (Math.round(weatherData.currently.ozone) > 299 && Math.round(weatherData.currently.ozone) < 501  ) {
+        if (weatherData.currently.ozone > 502 || weatherData.currently.ozone < -100) {
+            return "NA"
+        }
+        else if (Math.round(weatherData.currently.ozone) > 299 && Math.round(weatherData.currently.ozone) < 501  ) {
             return "Good" }
         else if (Math.round(weatherData.currently.ozone) < 300 && Math.round(weatherData.currently.ozone) > 220 ) {
              return "Moderate" }
         else if (Math.round(weatherData.currently.ozone) <= 220 && Math.round(weatherData.currently.ozone) <= 1) {
             return "Unhealthy" }
-        else if (weatherData.currently.ozone > 300 || weatherData.currently.ozone < 0) {
-            return "API Error"
-        }
         else  {
             return "Unknown" }
     }
 
     function calcUVI () {
-        if (weatherData.currently.uvIndex < 3 && weatherData.currently.uvIndex > 0) {
+        if (weatherData.currently.uvIndex > 12 || weatherData.currently.uvIndex < 0) {
+            return "NA"}
+        else if (weatherData.currently.uvIndex < 3 && weatherData.currently.uvIndex >= 0) {
             return "Low" }
-        else if (weatherData.currently.uvIndex < 6 ) {
+        else if (weatherData.currently.uvIndex < 6 && weatherData.currently.uvIndex >= 0) {
              return "Moderate" }
-        else if (weatherData.currently.uvIndex < 8 ) {
+        else if (weatherData.currently.uvIndex < 8 && weatherData.currently.uvIndex >= 0) {
              return "High" }
-        else if (weatherData.currently.uvIndex < 11 ) {
+        else if (weatherData.currently.uvIndex < 11 && weatherData.currently.uvIndex >= 0) {
              return "Very High" }
         else if (weatherData.currently.uvIndex >= 11 ) {
              return "Extreme" }
-        else if (data.currently.uvIndex > 12 || data.currently.uvIndex < 0) {
-            return "API Error"}
+
         else return "Unknown"
     }
 

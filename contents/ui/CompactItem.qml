@@ -23,17 +23,14 @@ Item {
         Text {
             text: isConfigured ? weatherAlert ? "⚠️":iconCode[weatherData.currently.panelIcon]:"?"
             color: Kirigami.Theme.textColor
-            //verticalAlignment: Text.AlignVCenter
             font.pointSize: 14
             font.family: 'weathericons'
             Layout.alignment: Qt.AlignVCenter
         }
         Text {
-            text: isConfigured ? weatherData.currently.temp:"--"
+            text: isConfigured ? weatherData.currently.temperature:"--"
             color: Kirigami.Theme.textColor
-            //verticalAlignment: Text.AlignVCenter
-            font.pointSize: 13 //Theme.defaultFont.pointSize // Theme.fontSizeMedium// Theme.fontSizeSmall
-            //fontSizeMode:  layoutType === 2 ? Text.FixedSize : Text.HorizontalFit
+            font.pointSize: 13
             Layout.alignment: Qt.AlignVCenter
             leftPadding: 4
         }

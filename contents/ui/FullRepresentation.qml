@@ -6,7 +6,7 @@ import org.kde.plasma.plasmoid
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth:560
+    Layout.preferredWidth:570
     Layout.preferredHeight:420
     Layout.minimumWidth:500
     Layout.maximumWidth:600
@@ -19,6 +19,23 @@ Item {
             viewLoad.item.hourlyForecastAlias.positionViewAtBeginning()
             viewLoad.item.dailyForecastAlias.visible=false
             viewLoad.item.hourlyForecastAlias.visible=true
+        }
+
+        function onShowForecastChanged () {
+            if(showForecast) {
+                Layout.preferredHeight=420
+            }
+            else {
+                Layout.preferredHeight=300
+            }
+         }
+    }
+
+
+    Behavior on Layout.preferredHeight {
+        NumberAnimation {
+            duration: 200
+            easing.type: Easing.InOutQuad
         }
     }
 
@@ -49,24 +66,24 @@ Item {
             antialiasing : true
             border.color:Kirigami.Theme.disabledTextColor
 
-        Text {
-            text:"Configure Weather"
-            color:Kirigami.Theme.textColor
-            anchors.centerIn:parent
-            font.pointSize:16
-            //bottomPadding:70
+            Text {
+                text:"Configure Weather"
+                color:Kirigami.Theme.textColor
+                anchors.centerIn:parent
+                font.pointSize:16
+                //bottomPadding:70
+            }
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                hoverEnabled:true
+                onEntered: parent.border.color=Kirigami.Theme.linkColor
+                onExited:parent.border.color=Kirigami.Theme.textColor
+                onClicked:plasmoid.internalAction("configure").trigger()
+                //onClicked:plasmoid.action("configure").trigger() //plasmoid.action("configure").trigger()  //plasmoid.configuration[0]
+            }
+            // plasmoid.configuration[0], can configure different sections of config
         }
-        MouseArea {
-            anchors.fill: parent
-            cursorShape: Qt.PointingHandCursor
-            hoverEnabled:true
-            onEntered: parent.border.color=Kirigami.Theme.linkColor
-            onExited:parent.border.color=Kirigami.Theme.textColor
-            onClicked:plasmoid.internalAction("configure").trigger()
-            //onClicked:plasmoid.action("configure").trigger() //plasmoid.action("configure").trigger()  //plasmoid.configuration[0]
-        }
-        // plasmoid.configuration[0], can configure different sections of config
-      }
     }
 
     Component {
@@ -153,7 +170,7 @@ Item {
                     id:temp
                     anchors.top:iconCode.top
                     anchors.topMargin:10
-                    text:weatherData.currently.temp
+                    text:weatherData.currently.temperature
                     color:Kirigami.Theme.textColor
                     font.pointSize:20
                     antialiasing : true
