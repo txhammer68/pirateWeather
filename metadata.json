@@ -16,7 +16,7 @@
         "Id": "pirateWeather",
         "License": "GPL-2.0",
         "Name": "Pirate Weather",
-        "Version": "2.53",
+        "Version": "2.54",
         "Website": "https://github.com/txhammer68/pirateWeather"
     },
     "X-Plasma-NotificationArea": "true",
