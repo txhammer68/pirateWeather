@@ -316,6 +316,7 @@ PlasmoidItem {
         repeat:  false
         onTriggered: {
             getData(weatherURL)
+            weatherTimer.restart()
         }
     }
 
