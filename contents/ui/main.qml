@@ -125,8 +125,10 @@ PlasmoidItem {
                         updateNotification.sendEvent()
                         console.error("Failed to parse JSON from:", url, e);
                         xhr.onreadystatechange = null;
+                        xhr=null;
                     } finally {
                         xhr.onreadystatechange = null;
+                        xhr=null;
                     }
                 } else {
                     // Handle API Down or Network Error (404, 500, etc.)
@@ -137,6 +139,7 @@ PlasmoidItem {
                     console.warn("API Error:", xhr.status, "URL:", url);
                     isConfigured=false
                     xhr.onreadystatechange = null;
+                    xhr=null;
                     Plasmoid.configurationRequired = true
                 }
             }
@@ -149,6 +152,7 @@ PlasmoidItem {
             updateNotification.sendEvent()
             console.error("Request timed out for:", url);
             xhr.onreadystatechange = null;
+            xhr=null;
         };
 
         xhr.onerror = function () {
@@ -158,8 +162,8 @@ PlasmoidItem {
             updateNotification.sendEvent()
             console.error("Network error occurred while fetching:", url);
             xhr.onreadystatechange = null;
+            xhr=null;
         };
-
         xhr.send();
     }
 
