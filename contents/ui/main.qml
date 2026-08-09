@@ -8,7 +8,7 @@ import org.kde.notification
 
 // pirate weather widget
 // api docs https://pirateweather.net/en/latest/API/
-// txhammer 01/2026
+// txhammer 08/2026
 
 PlasmoidItem {
     id: root
@@ -21,7 +21,7 @@ PlasmoidItem {
 
     property bool isConfigured:false
     property string apiKey: plasmoid.configuration.apiKey
-    property int updateInterval: plasmoid.configuration.updateInterval
+    property int updateInterval: Number(plasmoid.configuration.updateInterval)
     property bool showForecast:plasmoid.configuration.forecastSel
     property string latPoint: plasmoid.configuration.latCode
     property string lonPoint: plasmoid.configuration.lonCode
@@ -44,7 +44,7 @@ PlasmoidItem {
     property string notificationMsg:""
     property string notificationIcon:""
     property var iconCode:
-        {"clear-day": '\uf00d',
+    {"clear-day": '\uf00d',
         "clear-night": '\uf02e',
         "rain":'\uf019',
         "snow":'\uf01b',
@@ -59,16 +59,21 @@ PlasmoidItem {
         "tornado":'\uf056'
     }
 
-    Component.onCompleted:{
-               weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
-               autoUpdate ? getData(updateURL):""
-           }
-
     FontLoader {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
     }
 
-    onWeatherURLChanged:  weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
+    Component.onCompleted:{
+        if (checkConfig()) getData(weatherURL); else Plasmoid.configurationRequired = true;
+        //weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
+        autoUpdate ? getData(updateURL):""
+    }
+
+    function checkConfig() {
+        return apiKey && apiKey.length > 3 && latPoint && lonPoint
+    }
+
+    onWeatherURLChanged: if (checkConfig()) getData(weatherURL); else Plasmoid.configurationRequired = true;
     onUpdateIntervalChanged: weatherTimer.restart()
     onWeatherWarningsChanged:weatherWarnings ? weatherAlert=true : weatherAlert=false
 
@@ -119,6 +124,9 @@ PlasmoidItem {
                         notificationIcon="dialog-error"
                         updateNotification.sendEvent()
                         console.error("Failed to parse JSON from:", url, e);
+                        xhr.onreadystatechange = null;
+                    } finally {
+                        xhr.onreadystatechange = null;
                     }
                 } else {
                     // Handle API Down or Network Error (404, 500, etc.)
@@ -128,6 +136,7 @@ PlasmoidItem {
                     updateNotification.sendEvent()
                     console.warn("API Error:", xhr.status, "URL:", url);
                     isConfigured=false
+                    xhr.onreadystatechange = null;
                     Plasmoid.configurationRequired = true
                 }
             }
@@ -139,6 +148,7 @@ PlasmoidItem {
             notificationIcon="dialog-error"
             updateNotification.sendEvent()
             console.error("Request timed out for:", url);
+            xhr.onreadystatechange = null;
         };
 
         xhr.onerror = function () {
@@ -147,6 +157,7 @@ PlasmoidItem {
             notificationIcon="dialog-error"
             updateNotification.sendEvent()
             console.error("Network error occurred while fetching:", url);
+            xhr.onreadystatechange = null;
         };
 
         xhr.send();
@@ -170,13 +181,13 @@ PlasmoidItem {
         let c1={}
         let d1={}
         if (data) {
-            let c1={
+            c1={
                 lastUpdate:Qt.formatTime(new Date(data.currently.time*1000),"h:mm ap"),
                 apparentTemperature:(data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.apparentTemperature)+"°",
                 humidity: (data.currently.humidity > 200 || data.currently.humidity < 0) ? "NA" : Math.round(data.currently.humidity*100)+"%",
                 windBearing:degToCompass(data.currently.windBearing),
-                windGust:(data.currently.windGust === null && (data.currently.windGust > 300 || data.currently.windGust < 0)) ? "NA" : Math.round(data.currently.windGust),
-                windSpeed: (data.currently.windSpeed === null && (data.currently.windSpeed > 300 || data.currently.windSpeed < 0)) ? "NA":Math.round(data.currently.windSpeed),
+                windGust:(data.currently.windGust === null || (data.currently.windGust > 300 || data.currently.windGust < 0)) ? "NA" : Math.round(data.currently.windGust),
+                windSpeed: (data.currently.windSpeed === null || (data.currently.windSpeed > 300 || data.currently.windSpeed < 0)) ? "NA":Math.round(data.currently.windSpeed),
                 icon:"../icons/"+data.currently.icon+".svg",
                 panelIcon:data.currently.icon,
                 temperature: (data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.temperature)+"°",
@@ -268,36 +279,35 @@ PlasmoidItem {
         return arr[(val % 16)];
     }
 
-    function calcAQI () {
-        if (weatherData.currently.ozone > 502 || weatherData.currently.ozone < -100) {
-            return "NA"
-        }
-        else if (Math.round(weatherData.currently.ozone) > 299 && Math.round(weatherData.currently.ozone) < 501  ) {
-            return "Good" }
-        else if (Math.round(weatherData.currently.ozone) < 300 && Math.round(weatherData.currently.ozone) > 220 ) {
-             return "Moderate" }
-        else if (Math.round(weatherData.currently.ozone) <= 220 && Math.round(weatherData.currently.ozone) <= 1) {
-            return "Unhealthy" }
-        else  {
-            return "Unknown" }
+    function calcAQI() {
+        const o = Number(weatherData.currently.ozone);
+        // Validate that the input is a valid number
+        if (!Number.isFinite(o)) return "NA";
+        // Dobson Unit (DU) categories
+        const ranges = [
+            { max: 199, label: "Severely Depleted" },
+            { max: 249, label: "Low" },
+            { max: 299, label: "Moderate" },
+            { max: 349, label: "Normal" },
+            { max: 449, label: "High" }
+        ];
+
+        // Find the first range where the ozone value is less than or equal to the max
+        const match = ranges.find(range => o <= range.max);
+        // Return the matched label, or "Very High" if it exceeds all maximums
+        return match ? match.label : "Very High (≥450 DU)";
     }
 
-    function calcUVI () {
-        if (weatherData.currently.uvIndex > 12 || weatherData.currently.uvIndex < 0) {
-            return "NA"}
-        else if (weatherData.currently.uvIndex < 3 && weatherData.currently.uvIndex >= 0) {
-            return "Low" }
-        else if (weatherData.currently.uvIndex < 6 && weatherData.currently.uvIndex >= 0) {
-             return "Moderate" }
-        else if (weatherData.currently.uvIndex < 8 && weatherData.currently.uvIndex >= 0) {
-             return "High" }
-        else if (weatherData.currently.uvIndex < 11 && weatherData.currently.uvIndex >= 0) {
-             return "Very High" }
-        else if (weatherData.currently.uvIndex >= 11 ) {
-             return "Extreme" }
-
-        else return "Unknown"
+    function calcUVI() {
+        var u = Number(weatherData.currently.uvIndex)
+        if (!isFinite(u)) return "NA"
+        if (u < 3) return "Low"
+        else if (u < 6) return "Moderate"
+        else if (u < 8) return "High"
+        else if (u < 11) return "Very High"
+        else return "Extreme"
     }
+
 
     Timer {
         id: weatherTimer

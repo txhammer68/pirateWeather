@@ -52,10 +52,15 @@ Item {
         chkBoxUpdate.checked ? getData(updateURL):""
     }
 
+
+    function onConfigChanged() {
+       url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
+    }
+
     onUrl2Changed:cfg_api_url=url2
-    onCfg_apiKeyChanged:url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
-    onCfg_latCodeChanged:url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
-    onCfg_lonCodeChanged:url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
+    onCfg_apiKeyChanged: onConfigChanged()
+    onCfg_latCodeChanged: onConfigChanged()
+    onCfg_lonCodeChanged: onConfigChanged()
 
     Text {
         id:appVer
@@ -305,9 +310,9 @@ Item {
 
     function getData(url) {
         let xhr = new XMLHttpRequest()
-        xhr.open("GET", url,false)
+        xhr.open("GET", url,true)
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
                     let response = xhr.responseText
                     let data = JSON.parse(response)
@@ -343,17 +348,13 @@ Item {
     }
 
     function processGeoData(data) {
-        if (typeof(data) != undefined) {
-            let codes=data.loc.split(",",2)
-            latCode.text=codes[0]
-            lonCode.text=codes[1]
-            let c1=data.city
-            cityName.text=c1
-            let r1=data.region
-            regionName.text=r1
-            url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
-        }
-    return null
+        if (!data || !data.loc) return
+            let codes = data.loc.split(",", 2)
+            if (codes.length === 2) { latCode.text = codes[0]; lonCode.text = codes[1]; }
+            cityName.text = data.city || ""
+            regionName.text = data.region || ""
+            url2 = "https://api.pirateweather.net/forecast/" + cfg_apiKey + "/" + cfg_latCode + "," + cfg_lonCode + "?&units=" + cfg_units + "&exclude=minutely,flags"
+            return
     }
 
     function processUpdateData (data) {
