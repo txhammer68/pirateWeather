@@ -163,12 +163,13 @@ PlasmoidItem {
     }
 
     function processWeatherData (data) {
+        let hourly=[]
+        let daily=[]
+        let array={}
+        let h1={}
+        let c1={}
+        let d1={}
         if (data) {
-            let hourly=[]
-            let daily=[]
-            let array={}
-            let h1={}
-            let d1={}
             let c1={
                 lastUpdate:Qt.formatTime(new Date(data.currently.time*1000),"h:mm ap"),
                 apparentTemperature:(data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.apparentTemperature)+"°",
