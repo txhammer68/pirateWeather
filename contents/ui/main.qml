@@ -42,6 +42,11 @@ PlasmoidItem {
     property string notificationTitle:""
     property string notificationMsg:""
     property string notificationIcon:""
+   
+    readonly property real panelThickness:
+    (Plasmoid.formFactor === PlasmaCore.Types.Vertical)
+    ? parent.width : parent.height
+
     property var iconCode:
     {"clear-day": '\uf00d',
         "clear-night": '\uf02e',
