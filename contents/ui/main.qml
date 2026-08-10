@@ -31,8 +31,8 @@ PlasmoidItem {
     property string windUnits:plasmoid.configuration.windUnits
     property bool autoUpdate:plasmoid.configuration.chkBoxUpdate
 
-    property double currentVersion:Plasmoid.metaData.version
-    property double updateVersion:0.0
+    property real currentVersion:Plasmoid.metaData.version
+    property real updateVersion:0.0
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
 
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
@@ -64,7 +64,7 @@ PlasmoidItem {
     }
 
     Component.onCompleted:{
-        if (checkConfig()) getData(weatherURL); else Plasmoid.configurationRequired = true;
+        if ( checkConfig() ) getData(weatherURL); else Plasmoid.configurationRequired = true;
         //weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
         autoUpdate ? getData(updateURL):""
     }
@@ -106,8 +106,8 @@ PlasmoidItem {
     function getData(url) {
         let xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
-        // Set a timeout (10 seconds) so the widget doesn't hang on a dead connection
-        xhr.timeout = 10000;
+        // Set a timeout (5 seconds) so the widget doesn't hang on a dead connection
+        xhr.timeout = 5000;
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
@@ -164,6 +164,7 @@ PlasmoidItem {
             xhr.onreadystatechange = null;
             xhr=null;
         };
+
         xhr.send();
     }
 
@@ -190,8 +191,9 @@ PlasmoidItem {
                 apparentTemperature:(data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.apparentTemperature)+"°",
                 humidity: (data.currently.humidity > 200 || data.currently.humidity < 0) ? "NA" : Math.round(data.currently.humidity*100)+"%",
                 windBearing:degToCompass(data.currently.windBearing),
-                windGust:(data.currently.windGust === null || (data.currently.windGust > 300 || data.currently.windGust < 0)) ? "NA" : Math.round(data.currently.windGust),
-                windSpeed: (data.currently.windSpeed === null || (data.currently.windSpeed > 300 || data.currently.windSpeed < 0)) ? "NA":Math.round(data.currently.windSpeed),
+                // // The value is either null, undefined, or NaN
+                windGust:(data.currently.windGust === null || Number.isNaN(data.currently.windGust) || (data.currently.windGust > 300 || data.currently.windGust < 0)) ? "NA" : Math.round(data.currently.windGust),
+                windSpeed: (data.currently.windSpeed === null || Number.isNaN(data.currently.windGust) || (data.currently.windSpeed > 300 || data.currently.windSpeed < 0)) ? "NA":Math.round(data.currently.windSpeed),
                 icon:"../icons/"+data.currently.icon+".svg",
                 panelIcon:data.currently.icon,
                 temperature: (data.currently.temperature > 200 || data.currently.temperature < -200) ? "NA":Math.round(data.currently.temperature)+"°",
@@ -243,8 +245,8 @@ PlasmoidItem {
                 temperature:"--",
                 dewPoint:"--",
                 visibility:"--",
-                uvIndex:"--",
-                ozone:"--",
+                uvIndex:undefined,
+                ozone:undefined,
                 conditions:"No Data",
                 summary:"No Data check settings or network connection",
                 warnings:false,
@@ -289,7 +291,7 @@ PlasmoidItem {
         if (!Number.isFinite(o)) return "NA";
         // Dobson Unit (DU) categories
         const ranges = [
-            { max: 199, label: "Severely Depleted" },
+            { max: 199, label: "Severe" },
             { max: 249, label: "Low" },
             { max: 299, label: "Moderate" },
             { max: 349, label: "Normal" },
@@ -299,7 +301,7 @@ PlasmoidItem {
         // Find the first range where the ozone value is less than or equal to the max
         const match = ranges.find(range => o <= range.max);
         // Return the matched label, or "Very High" if it exceeds all maximums
-        return match ? match.label : "Very High (≥450 DU)";
+        return match ? match.label : "Very High";
     }
 
     function calcUVI() {
@@ -311,7 +313,6 @@ PlasmoidItem {
         else if (u < 11) return "Very High"
         else return "Extreme"
     }
-
 
     Timer {
         id: weatherTimer
