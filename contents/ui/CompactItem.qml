@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import org.kde.plasma.plasmoid
 import org.kde.kirigami as Kirigami
 
 Item {
@@ -24,8 +23,8 @@ Item {
             text: isConfigured ? weatherAlert ? "⚠️":iconCode[weatherData.currently.panelIcon]:"?"
             color: Kirigami.Theme.textColor
             font.pointSize: panelThickness * 0.35
-            antialiasing : true
             font.family: 'weathericons'
+            antialiasing : true
             Layout.alignment: Qt.AlignVCenter
         }
         Text {

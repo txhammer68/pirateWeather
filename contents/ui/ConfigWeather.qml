@@ -19,7 +19,6 @@ Item {
     property alias cfg_cityName:cityName.text
     property alias cfg_regionName:regionName.text
     property alias cfg_chkBoxUpdate:chkBoxUpdate.checked
-    property string url2
     property string cfg_api_url
 
     property string cfg_apiKeyDefault
@@ -48,16 +47,17 @@ Item {
     Component.onCompleted:{
         measSel.currentIndex=cfg_idx
         chkBoxUpdate.checked=cfg_chkBoxUpdate
-        url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
+        cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
         chkBoxUpdate.checked ? getData(updateURL):""
     }
 
 
     function onConfigChanged() {
-       url2="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags"
+     cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
     }
 
-    onUrl2Changed:cfg_api_url=url2
+   //https://api.pirateweather.net/forecast/jan0qxHEUM1IoOy0qsugHXqXEOlWn8Ib/29.6658,-95.0194?&units=us&exclude=minutely,flags&version=2
+
     onCfg_apiKeyChanged: onConfigChanged()
     onCfg_latCodeChanged: onConfigChanged()
     onCfg_lonCodeChanged: onConfigChanged()
@@ -67,7 +67,7 @@ Item {
         anchors.top:parent.top
         anchors.right:parent.right
         anchors.margins:10
-        text:Plasmoid.metaData.version
+        text:cfg_api_url//Plasmoid.metaData.version
         color:Kirigami.Theme.disabledTextColor
         font.pointSize:11
     }
@@ -353,7 +353,7 @@ Item {
             if (codes.length === 2) { latCode.text = codes[0]; lonCode.text = codes[1]; }
             cityName.text = data.city || ""
             regionName.text = data.region || ""
-            url2 = "https://api.pirateweather.net/forecast/" + cfg_apiKey + "/" + cfg_latCode + "," + cfg_lonCode + "?&units=" + cfg_units + "&exclude=minutely,flags"
+            cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
             return
     }
 

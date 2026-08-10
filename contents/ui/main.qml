@@ -6,9 +6,25 @@ import QtNetwork
 import org.kde.plasma.configuration
 import org.kde.notification
 
-// pirate weather widget
-// api docs https://pirateweather.net/en/latest/API/
-// txhammer 08/2026
+/*
+ * txhammer 08/2026
+ * Pirate Weather Widget for Plasma 6
+ * api docs https://pirateweather.net/en/latest/API/
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 
 PlasmoidItem {
     id: root
@@ -35,15 +51,15 @@ PlasmoidItem {
     property real updateVersion:0.0
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
 
-    property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
+    property string weatherURL:plasmoid.configuration.api_url
     property var weatherData:{}
     property bool weatherWarnings:false
     property bool weatherAlert:false
     property string notificationTitle:""
     property string notificationMsg:""
     property string notificationIcon:""
-   
-    readonly property real panelThickness:
+
+    readonly property real panelThickness: // useed to determine font size in panel
     (Plasmoid.formFactor === PlasmaCore.Types.Vertical)
     ? parent.width : parent.height
 
@@ -205,6 +221,7 @@ PlasmoidItem {
                 visibility: (data.currently.visibility > 200 || data.currently.visibility < 0) ? "NA":Math.round(data.currently.visibility),
                 uvIndex:data.currently.uvIndex,
                 ozone:data.currently.ozone,
+                aqi:Number(data.currently.airQualityIndex),
                 conditions:data.currently.summary,
                 summary:data.hourly.summary,
                 warnings:data.alerts.length > 0  ? true:false, // check if alert exists
@@ -251,6 +268,7 @@ PlasmoidItem {
                 visibility:"--",
                 uvIndex:undefined,
                 ozone:undefined,
+                aqi:undefined,
                 conditions:"No Data",
                 summary:"No Data check settings or network connection",
                 warnings:false,
@@ -290,22 +308,21 @@ PlasmoidItem {
     }
 
     function calcAQI() {
-        const o = Number(weatherData.currently.ozone);
+        const o = Number(weatherData.currently.aqi);
         // Validate that the input is a valid number
         if (!Number.isFinite(o)) return "NA";
-        // Dobson Unit (DU) categories
         const ranges = [
-            { max: 199, label: "Severe" },
-            { max: 249, label: "Low" },
-            { max: 299, label: "Moderate" },
-            { max: 349, label: "Normal" },
-            { max: 449, label: "High" }
+            { max: 50, label: "Good" },
+            { max: 100, label: "Fair" },
+            { max: 150, label: "Moderate" },
+            { max: 200, label: "Unhealthy" },
+            { max: 300, label: "Extreme" }
         ];
 
-        // Find the first range where the ozone value is less than or equal to the max
+        // Find the first range where the aqi value is less than or equal to the max
         const match = ranges.find(range => o <= range.max);
-        // Return the matched label, or "Very High" if it exceeds all maximums
-        return match ? match.label : "Very High";
+        // Return the matched label, or "Extreme!!!" if it exceeds all maximums
+        return match ? match.label : "Extreme!!!";
     }
 
     function calcUVI() {
