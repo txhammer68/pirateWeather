@@ -15,6 +15,7 @@ Pirate Weather was developed on the closure of Dark Sky Weather providing an alt
  
 Data Sources - https://docs.pirateweather.net/en/latest/DataSources/ <br>
 Sign up for a free api key here https://pirate-weather.apiable.io/ <br>
+08/09/2026 - Updated to V2 of PW API
 
 * Install with
  ``` bash
