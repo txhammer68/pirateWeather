@@ -32,7 +32,7 @@ kpackagetool6 --remove scoreBoard --type Plasma/Applet
 * Install widget to panel or desktop floating
 * Right click on widget to configure
 * Enter API Key
-* Select mesurement units
+* Select measurement units
 * Select Update Interval (10-60 mins)
 * Uses IP address to get geo coordinates - Disable VPN on first install/use
 * Click Get GeoCodes to get Geo Coordinates Locatiion
