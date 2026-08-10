@@ -253,7 +253,7 @@ PlasmoidItem {
                 weatherAlertsURL:"--",
                 weatherAlertsDesc:"--"
             }
-            for (let x=0;x<7;x++) {
+            for (let x=0;x<12;x++) {
                 h1={time:"--",
                     icon:"../icons/na.png",
                     temp:"--",
