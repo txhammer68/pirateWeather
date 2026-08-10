@@ -23,6 +23,10 @@ git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather/ && kpa
 ``` bash
 git clone https://github.com/TxHammer68/pirateWeather /tmp/pirateWeather/ && kpackagetool6 -t Plasma/Applet -u /tmp/pirateWeather/
 ```
+* Remove with
+``` bash
+kpackagetool6 --remove pirateWeather --type Plasma/Applet
+```
 * Install widget to panel or desktop floating
 * Right click on widget to configure
 * Enter API Key
