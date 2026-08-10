@@ -56,8 +56,6 @@ Item {
      cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
     }
 
-   //https://api.pirateweather.net/forecast/jan0qxHEUM1IoOy0qsugHXqXEOlWn8Ib/29.6658,-95.0194?&units=us&exclude=minutely,flags&version=2
-
     onCfg_apiKeyChanged: onConfigChanged()
     onCfg_latCodeChanged: onConfigChanged()
     onCfg_lonCodeChanged: onConfigChanged()
@@ -67,7 +65,7 @@ Item {
         anchors.top:parent.top
         anchors.right:parent.right
         anchors.margins:10
-        text:cfg_api_url//Plasmoid.metaData.version
+        text:Plasmoid.metaData.version
         color:Kirigami.Theme.disabledTextColor
         font.pointSize:11
     }
