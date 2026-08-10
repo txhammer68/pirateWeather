@@ -36,7 +36,6 @@ PlasmoidItem {
     property string updateURL:"https://raw.githubusercontent.com/txhammer68/pirateWeather/refs/heads/main/metadata.json"
 
     property string weatherURL:"https://api.pirateweather.net/forecast/"+apiKey+"/"+latPoint+","+lonPoint+"?&units="+units+"&exclude=minutely,flags"
-
     property var weatherData:{}
     property bool weatherWarnings:false
     property bool weatherAlert:false
@@ -70,7 +69,7 @@ PlasmoidItem {
     }
 
     function checkConfig() {
-        return apiKey && apiKey.length > 3 && latPoint && lonPoint
+        return apiKey && apiKey.length > 10 && latPoint && lonPoint
     }
 
     onWeatherURLChanged: if (checkConfig()) getData(weatherURL); else Plasmoid.configurationRequired = true;
