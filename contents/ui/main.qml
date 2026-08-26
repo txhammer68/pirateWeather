@@ -234,7 +234,7 @@ PlasmoidItem {
                 h1={time:Qt.formatTime(new Date(data.hourly.data[x].time*1000),"h:mm ap"),
                     icon:"../icons/"+data.hourly.data[x].icon+".svg",
                     temp:Math.round(data.hourly.data[x].temperature)+"°",
-                    precip:Math.round(data.hourly.data[x].precipProbability*100/10)*10+"%"}
+                    precip:Math.round(data.hourly.data[x].precipProbability*10)*10+"%"}
                     hourly.push(h1)
             }
 
@@ -243,7 +243,7 @@ PlasmoidItem {
                     icon:"../icons/"+data.daily.data[x].icon+".svg",
                     lowTemp:Math.round(data.daily.data[x].temperatureLow)+"°",
                     highTemp:Math.round(data.daily.data[x].temperatureHigh)+"°",
-                    precip:Math.round(data.daily.data[x].precipProbability*100/10)*10+"%"}
+                    precip:Math.round(data.daily.data[x].precipProbability*10)*10+"%"}
                     daily.push(d1)
             }
 
