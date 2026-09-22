@@ -51,6 +51,8 @@ Item {
         chkBoxUpdate.checked ? getData(updateURL):""
     }
 
+    // cfg_api_url=`https://pirateweather.net/forecast/${cfg_apiKey}/${cfg_latCode},${cfg_lonCode}?&units=${cfg_units}&exclude=minutely,flags&version=2`;
+
 
     function onConfigChanged() {
      cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"

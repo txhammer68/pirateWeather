@@ -5,6 +5,7 @@ import org.kde.plasma.core as PlasmaCore
 import QtNetwork
 import org.kde.plasma.configuration
 import org.kde.notification
+import org.kde.kirigami as Kirigami
 
 /*
  * txhammer 08/2026
@@ -36,13 +37,13 @@ PlasmoidItem {
     toolTipSubText:weatherData.currently.warnings ?  weatherData.currently.weatherAlertsDesc : ""
 
     property bool isConfigured:false
-    property string apiKey: plasmoid.configuration.apiKey
-    property int updateInterval: Number(plasmoid.configuration.updateInterval)
+    property string apiKey: plasmoid.configuration.apiKey.trim();
+    property int updateInterval: Number(plasmoid.configuration.updateInterval).trim();
     property bool showForecast:plasmoid.configuration.forecastSel
-    property string latPoint: plasmoid.configuration.latCode
-    property string lonPoint: plasmoid.configuration.lonCode
-    property string cityName:plasmoid.configuration.cityName
-    property string regionName:plasmoid.configuration.regionName
+    property string latPoint: plasmoid.configuration.latCode.trim();
+    property string lonPoint: plasmoid.configuration.lonCode.trim();
+    property string cityName:plasmoid.configuration.cityName.trim();
+    property string regionName:plasmoid.configuration.regionName.trim();
     property string units:plasmoid.configuration.units
     property string windUnits:plasmoid.configuration.windUnits
     property bool autoUpdate:plasmoid.configuration.chkBoxUpdate
@@ -78,6 +79,24 @@ PlasmoidItem {
         "thunderstorm":'\uf01e',
         "tornado":'\uf056'
     }
+
+
+    Kirigami.Theme.inherit: false
+    //Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
+    //Kirigami.Theme.colorSet: Kirigami.Theme.Window
+
+    property color backgroundColor:Kirigami.Theme.backgroundColor
+    property color activeBackgroundColor:Kirigami.Theme.activeBackgroundColor
+    property color textColor:Kirigami.Theme.textColor
+    property color disabledTextColor:Kirigami.Theme.disabledTextColor
+    property color linkColor:Kirigami.Theme.linkColor
+
+
+    property int smallFontSize:Kirigami.Theme.smallFont.pointSize+1
+    property int defaultFontSize:Kirigami.Theme.defaultFont.pointSize
+
+    property int iconSizeMed:Kirigami.Units.iconSizes.medium
 
     FontLoader {
         source: '../fonts/weathericons-regular-webfont-2.0.10.ttf'
@@ -119,7 +138,7 @@ PlasmoidItem {
             flags: Notification.CloseOnTimeout
             urgency: Notification.DefaultUrgency
             //timeout:5000
-            onClosed: console.log("Notification closed.")
+            //onClosed: console.log("Notification closed.")
         }
     }
 
@@ -358,10 +377,18 @@ PlasmoidItem {
     }
 
     Connections {
-        target:NetworkInformation
-        onReachabilityChanged: {
-            if (NetworkInformation.reachability == 4) {
-                suspendTimer.start();
+        target: NetworkInformation
+        function onReachabilityChanged() {
+            // Access the property through the NetworkInformation object
+            if (NetworkInformation.reachability === NetworkInformation.Reachability.Online) {
+                console.log("Device is online and connected to the internet!")
+                if (!suspendTimer.running) {
+                    console.log("Starting 20s cooldown...")
+                    suspendTimer.start()
+                }
+            } else if (NetworkInformation.reachability === NetworkInformation.Reachability.Disconnected) {
+                console.log("Device is disconnected from the network.")
+                suspendTimer.stop()
             }
         }
     }

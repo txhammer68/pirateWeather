@@ -21,7 +21,7 @@ Item {
 
         Text {
             text: isConfigured ? weatherAlert ? "⚠️":iconCode[weatherData.currently.panelIcon]:"?"
-            color: Kirigami.Theme.textColor
+            color: textColor
             font.pointSize: panelThickness * 0.35
             font.family: 'weathericons'
             antialiasing : true
@@ -29,7 +29,7 @@ Item {
         }
         Text {
             text: isConfigured ? weatherData.currently.temperature:"--"
-            color: Kirigami.Theme.textColor
+            color: textColor
             font.pointSize: panelThickness * 0.35
             antialiasing : true
             Layout.alignment: Qt.AlignVCenter
