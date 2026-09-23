@@ -60,6 +60,10 @@ PlasmoidItem {
     property string notificationMsg:""
     property string notificationIcon:""
 
+    property string errorMsg:"--"
+
+    onErrorMsgChanged: plasmoid.configuration.errorMsg = errorMsg
+
     readonly property real panelThickness: // useed to determine font size in panel
     (Plasmoid.formFactor === PlasmaCore.Types.Vertical)
     ? parent.width : parent.height
@@ -104,6 +108,7 @@ PlasmoidItem {
     }
 
     Component.onCompleted:{
+        plasmoid.configuration.errorMsg=errorMsg
         if ( checkConfig() ) getData(weatherURL); else Plasmoid.configurationRequired = true;
         //weatherURL.length > 116 ? getData(weatherURL):Plasmoid.configurationRequired=true
         autoUpdate ? getData(updateURL):""
@@ -145,7 +150,8 @@ PlasmoidItem {
     }
 
     function getData(url) {
-        let xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest();
+        var errorObject = null
         xhr.open("GET", url, true);
         // Set a timeout (5 seconds) so the widget doesn't hang on a dead connection
         xhr.timeout = 5000;
@@ -160,14 +166,18 @@ PlasmoidItem {
                             processUpdateData(data)
                         }
                     } catch (e) {
+                        errorObject = e;
                         notificationTitle="Pirate Weather Error"
                         notificationMsg="Failed to parse JSON Data"
                         notificationIcon="dialog-error"
                         updateNotification.sendEvent()
                         console.error("Failed to parse JSON from:", url, e);
+                        errorMsg=("Failed to parse JSON from: " + url + " " + e)
                         xhr.onreadystatechange = null;
                         xhr=null;
                     } finally {
+                        let errorDetail = errorObject ? " " + errorObject : "--";
+                        errorMsg=("Status Code: "+xhr.status + "\n #### URL: " + url + "\n #### Error Msg: " + errorDetail)
                         xhr.onreadystatechange = null;
                         xhr=null;
                     }
@@ -178,6 +188,7 @@ PlasmoidItem {
                     notificationIcon="dialog-error"
                     updateNotification.sendEvent()
                     console.warn("API Error:", xhr.status, "URL:", url);
+                    errorMsg=("API Error: "+xhr.status + "\n #### URL: " + url)
                     isConfigured=false
                     xhr.onreadystatechange = null;
                     xhr=null;
@@ -192,6 +203,7 @@ PlasmoidItem {
             notificationIcon="dialog-error"
             updateNotification.sendEvent()
             console.error("Request timed out for:", url);
+            errorMsg=("Request timed out for: "+url)
             xhr.onreadystatechange = null;
             xhr=null;
         };
@@ -202,6 +214,7 @@ PlasmoidItem {
             notificationIcon="dialog-error"
             updateNotification.sendEvent()
             console.error("Network error occurred while fetching:", url);
+            errorMsg=("Network error occurred while fetching: "+url)
             xhr.onreadystatechange = null;
             xhr=null;
         };
