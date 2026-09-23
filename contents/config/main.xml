@@ -55,5 +55,9 @@
       <attribute name="chkBoxUpdate" type="Bool"/>
       <default>true</default>
     </entry>
+    <entry name="errorMsg" type="String">
+      <attribute name="errorMsg" use="optional" type="String"/>
+      <default>"--"</default>
+    </entry>
   </group>
 </kcfg>

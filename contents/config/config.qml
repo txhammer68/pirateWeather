@@ -6,12 +6,17 @@ ConfigModel {
 
     ConfigCategory {
          name: "Settings"
-         icon: "settings"
+         icon: "configure"
          source: "ConfigWeather.qml"
     }
     ConfigCategory {
         name: "Setup"
         icon: "mdmsetup"
         source: "SetupConfig.qml"
+    }
+    ConfigCategory {
+        name: "Debug"
+        icon: "debug-run"
+        source: "DebugConfig.qml"
     }
 }
