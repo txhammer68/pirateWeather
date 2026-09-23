@@ -61,6 +61,7 @@ Item {
     onCfg_apiKeyChanged: onConfigChanged()
     onCfg_latCodeChanged: onConfigChanged()
     onCfg_lonCodeChanged: onConfigChanged()
+    onCfg_unitsChanged:onConfigChanged()
 
     Text {
         id:appVer
