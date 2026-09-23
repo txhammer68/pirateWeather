@@ -255,7 +255,7 @@ PlasmoidItem {
                 h1={time:data.hourly.data[x].time != undefined ? Qt.formatTime(new Date(data.hourly.data[x].time*1000),"h:mm ap") : "--",
                     icon:data.hourly.data[x].icon != undefined ? "../icons/"+data.hourly.data[x].icon+".svg" : "../icons/na.png",
                     temp:isValidRange(data.hourly.data[x].temperature,-180,180) ? Math.round(data.hourly.data[x].temperature)+"°" : "--",
-                    precip:isValidRange(data.hourly.data[x].precipProbability,-1,2) ? Math.round(data.hourly.data[x].precipProbability*10)*10+"%" : "--"}
+                    precip:isValidRange(data.hourly.data[x].precipProbability*10,-1,2) ? Math.round(data.hourly.data[x].precipProbability*10)*10+"%" : "--"}
                     hourly.push(h1)
             }
 
@@ -264,7 +264,7 @@ PlasmoidItem {
                     icon:(data.daily.data[x].icon != undefined) ? "../icons/"+data.daily.data[x].icon+".svg" : "../icons/na.png",
                     lowTemp:isValidRange(data.daily.data[x].temperatureLow,-140,140) ? Math.round(data.daily.data[x].temperatureLow)+"°" : "--",
                     highTemp:isValidRange(data.daily.data[x].temperatureHigh,-140,180) ?  Math.round(data.daily.data[x].temperatureHigh)+"°" : "--",
-                    precip:isValidRange(data.daily.data[x].precipProbability,-1,2) ?  Math.round(data.daily.data[x].precipProbability*10)*10+"%" : "--" }
+                    precip:isValidRange(data.daily.data[x].precipProbability*10,-1,2) ?  Math.round(data.daily.data[x].precipProbability*10)*10+"%" : "--" }
                     daily.push(d1)
             }
 
