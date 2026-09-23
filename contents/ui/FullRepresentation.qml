@@ -5,7 +5,7 @@ import org.kde.plasma.plasmoid
 
 Item {
     id: fullRepresentation
-    Layout.preferredWidth:570
+    Layout.preferredWidth:560
     Layout.preferredHeight:410
     Layout.minimumWidth:500
     Layout.maximumWidth:600
@@ -22,7 +22,7 @@ Item {
 
         function onShowForecastChanged () {
             if(showForecast) {
-                Layout.preferredHeight=420
+                Layout.preferredHeight=410
             }
             else {
                 Layout.preferredHeight=300
@@ -590,7 +590,7 @@ Item {
                     visible:true
                     spacing:14
                     width:hourly.width
-                    contentWidth: hourly.width
+                    //contentWidth: hourly.width
                     height:128
                     orientation:ListView.Horizontal
                     layoutDirection:Qt.LeftToRight
@@ -598,6 +598,7 @@ Item {
                     flickableDirection: Flickable.HorizontalFlick
                     boundsBehavior: Flickable.StopAtBounds
                     highlightMoveDuration:500
+                    //highlightMoveVelocity:2
                     clip:true
                     interactive:true
                     model:weatherData.hourly

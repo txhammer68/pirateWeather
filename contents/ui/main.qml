@@ -228,40 +228,40 @@ PlasmoidItem {
         let d1={}
         if (data) {
             c1={
-                lastUpdate:(data.currently.time != undefined) ? Qt.formatTime(new Date(data.currently.time*1000),"h:mm ap") : "--",
+                lastUpdate:data.currently.time ? Qt.formatTime(new Date(data.currently.time*1000),"h:mm ap") : "--",
                 apparentTemperature:isValidRange(data.currently.apparentTemperature,-180,180) ? Math.round(data.currently.apparentTemperature)+"°" : "NA",
                 humidity: isValidRange(data.currently.humidity*100,-1,120) ? Math.round(data.currently.humidity*100)+"%" : "NA",
                 windBearing:isValidRange(data.currently.windBearing,-1,361) ? degToCompass(data.currently.windBearing) : "NA",
                 // // The value is either null, undefined, or NaN
                 windGust:isValidRange(data.currently.windGust,-1,460) ? Math.round(data.currently.windGust) : "NA",
                 windSpeed:isValidRange(data.currently.windSpeed,-1,460) ? Math.round(data.currently.windSpeed) : "NA" ,
-                icon:data.currently.icon == undefined ? "../icons/na.png" : "../icons/"+data.currently.icon+".svg",
-                panelIcon:data.currently.icon == undefined ? "--" : data.currently.icon,
+                icon:data.currently.icon ? "../icons/"+data.currently.icon+".svg" : "../icons/na.png",
+                panelIcon:data.currently.icon ? data.currently.icon : "--",
                 temperature:  isValidRange(data.currently.temperature,-180,180) ? Math.round(data.currently.temperature)+"°" : "NA",
                 dewPoint: isValidRange(data.currently.dewPoint,-140,140) ? Math.round(data.currently.dewPoint)+"°" : "NA",
                 visibility: isValidRange(data.currently.visibility,-10,125) ? Math.round(data.currently.visibility) : "NA",
                 uvIndex:isValidRange(data.currently.uvIndex,-1,20) ? data.currently.uvIndex:undefined,
                 ozone:isValidRange(data.currently.ozone,-1,600) ? data.currently.ozone:undefined,
                 aqi:isValidRange(data.currently.airQualityIndex,-1,360) ? Number(data.currently.airQualityIndex) : undefined,
-                conditions:data.currently.summary != undefined ? data.currently.summary : "NA",
-                summary:data.hourly.summary != undefined ? data.hourly.summary : "NA",
-                warnings:data.alerts !=undefined && data.alerts.length > 0  ? true:false, // check if alert exists
-                alertText:data.alerts !=undefined && data.alerts.length > 0 ? "⚠️ "+data.alerts[0].title : "",
-                weatherAlertsURL:data.alerts !=undefined && data.alerts.length > 0 ? data.alerts[0].uri :"",
-                weatherAlertsDesc:data.alerts !=undefined && data.alerts.length > 0 ? data.alerts[0].description : ""
+                conditions:data.currently.summary ? data.currently.summary : "NA",
+                summary:data.hourly.summary ? data.hourly.summary : "NA",
+                warnings:data.alerts?.length > 0  ? true:false, // check if alert exists
+                alertText:data.alerts?.length > 0 ? "⚠️ "+data.alerts[0].title : "",
+                weatherAlertsURL:data.alerts?.length > 0 ? data.alerts[0].uri :"",
+                weatherAlertsDesc:data.alerts?.length > 0 ? data.alerts[0].description : ""
             }
 
             for (let x=0;x<data.hourly.data.length;x++) {
-                h1={time:data.hourly.data[x].time != undefined ? Qt.formatTime(new Date(data.hourly.data[x].time*1000),"h:mm ap") : "--",
-                    icon:data.hourly.data[x].icon != undefined ? "../icons/"+data.hourly.data[x].icon+".svg" : "../icons/na.png",
+                h1={time:data.hourly.data[x].time ? Qt.formatTime(new Date(data.hourly.data[x].time*1000),"h:mm ap") : "--",
+                    icon:data.hourly.data[x].icon ? "../icons/"+data.hourly.data[x].icon+".svg" : "../icons/na.png",
                     temp:isValidRange(data.hourly.data[x].temperature,-180,180) ? Math.round(data.hourly.data[x].temperature)+"°" : "--",
                     precip:isValidRange(data.hourly.data[x].precipProbability,-1,2) ? Math.round(data.hourly.data[x].precipProbability*10)*10+"%" : "--"}
                     hourly.push(h1)
             }
 
             for (let x=0;x<data.daily.data.length;x++) {
-                d1={time:(data.daily.data[x].time != undefined) ? Qt.formatDate(new Date(data.daily.data[x].time*1000),"ddd") : "--",
-                    icon:(data.daily.data[x].icon != undefined) ? "../icons/"+data.daily.data[x].icon+".svg" : "../icons/na.png",
+                d1={time:data.daily.data[x].time ? Qt.formatDate(new Date(data.daily.data[x].time*1000),"ddd") : "--",
+                    icon:data.daily.data[x].icon ? "../icons/"+data.daily.data[x].icon+".svg" : "../icons/na.png",
                     lowTemp:isValidRange(data.daily.data[x].temperatureLow,-140,140) ? Math.round(data.daily.data[x].temperatureLow)+"°" : "--",
                     highTemp:isValidRange(data.daily.data[x].temperatureHigh,-140,180) ?  Math.round(data.daily.data[x].temperatureHigh)+"°" : "--",
                     precip:isValidRange(data.daily.data[x].precipProbability,-1,2) ?  Math.round(data.daily.data[x].precipProbability*10)*10+"%" : "--" }
