@@ -168,16 +168,17 @@ PlasmoidItem {
                     } catch (e) {
                         errorObject = e;
                         notificationTitle="Pirate Weather Error"
-                        notificationMsg="Failed to parse JSON Data"
+                        notificationMsg="Failed to parse JSON data"
                         notificationIcon="dialog-error"
                         updateNotification.sendEvent()
-                        console.error("Failed to parse JSON from:", url, e);
-                        errorMsg=("Failed to parse JSON from: " + url + " " + e)
+                        console.error("Failed to parse JSON data:", url, e);
+                        errorMsg=("Failed to parse JSON data: " + "#### Status Code: "+ xhr.status +  "\n #### Error Msg: "+ e)
                         xhr.onreadystatechange = null;
                         xhr=null;
                     } finally {
                         let errorDetail = errorObject ? " " + errorObject : "--";
-                        errorMsg=("Status Code: "+xhr.status + "\n #### URL: " + url + "\n #### Error Msg: " + errorDetail)
+                        console.log(xhr.status, url, e);
+                        errorMsg=("Status Code: " + xhr.status + "\n #### Error Msg: " + errorDetail)
                         xhr.onreadystatechange = null;
                         xhr=null;
                     }
@@ -187,8 +188,8 @@ PlasmoidItem {
                     notificationMsg="API Key Error:"
                     notificationIcon="dialog-error"
                     updateNotification.sendEvent()
-                    console.warn("API Error:", xhr.status, "URL:", url);
-                    errorMsg=("API Error: "+xhr.status + "\n #### URL: " + url)
+                    console.warn("API Key Error: ", "#### Status Code: ", xhr.status, errorDetail);
+                    errorMsg=("API Key Error: "+ "#### Status Code: "+ xhr.status + "\n #### Error Msg: " + errorDetail)
                     isConfigured=false
                     xhr.onreadystatechange = null;
                     xhr=null;
@@ -202,8 +203,8 @@ PlasmoidItem {
             notificationMsg="Request timed out, check network connection"
             notificationIcon="dialog-error"
             updateNotification.sendEvent()
-            console.error("Request timed out for:", url);
-            errorMsg=("Request timed out for: "+url)
+            console.error("Request timed out for:", url,errorDetail);
+            errorMsg=("Request timed out for: " + "#### Status Code: "+ xhr.status + "\n #### Error Msg: " + errorDetail)
             xhr.onreadystatechange = null;
             xhr=null;
         };
@@ -213,8 +214,8 @@ PlasmoidItem {
             notificationMsg="Request timed out, check network connection"
             notificationIcon="dialog-error"
             updateNotification.sendEvent()
-            console.error("Network error occurred while fetching:", url);
-            errorMsg=("Network error occurred while fetching: "+url)
+            console.error("Network error occurred while fetching:", url,errorDetail);
+            errorMsg=("Network error occurred while fetching: " + "#### Status Code: "+ xhr.status + "\n #### Error Msg: " + errorDetail)
             xhr.onreadystatechange = null;
             xhr=null;
         };

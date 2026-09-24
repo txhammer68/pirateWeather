@@ -20,6 +20,7 @@ Item {
     property alias cfg_regionName:regionName.text
     property alias cfg_chkBoxUpdate:chkBoxUpdate.checked
     property string cfg_api_url
+    property string cfg_api_url_base
 
     property string cfg_apiKeyDefault
     property string cfg_updateIntervalDefault
@@ -48,6 +49,7 @@ Item {
         measSel.currentIndex=cfg_idx
         chkBoxUpdate.checked=cfg_chkBoxUpdate
         cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
+        cfg_api_url_base="https://api.pirateweather.net/forecast/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
         chkBoxUpdate.checked ? getData(updateURL):""
     }
 
@@ -56,6 +58,7 @@ Item {
 
     function onConfigChanged() {
      cfg_api_url="https://api.pirateweather.net/forecast/"+cfg_apiKey+"/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
+     cfg_api_url_base="https://api.pirateweather.net/forecast/"+cfg_latCode+","+cfg_lonCode+"?&units="+cfg_units+"&exclude=minutely,flags&version=2"
     }
 
     onCfg_apiKeyChanged: onConfigChanged()

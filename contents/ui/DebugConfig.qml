@@ -28,7 +28,7 @@ import org.kde.plasma.plasmoid
      font.pointSize:12
      antialiasing : true
      text:msgText +"\n \n" +
-          "#### API URL: [" + plasmoid.configuration.api_url + "](" + plasmoid.configuration.api_url + ")\n" +
+          "#### API URL: [" + plasmoid.configuration.api_url_base + "](" + plasmoid.configuration.api_url_base + ")\n" +
           "#### Version: "+ Plasmoid.metaData.version + "\n" +
           "#### Error Msg: " + plasmoid.configuration.errorMsg + "\n" +
            "==========================================================="
