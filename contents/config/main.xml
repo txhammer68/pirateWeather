@@ -51,6 +51,9 @@
     <entry name="api_url" type="string">
       <attribute name="api_url" type="String"/>
     </entry>
+    <entry name="api_url_base" type="string">
+      <attribute name="api_url_base" type="String"/>
+    </entry>
     <entry name="chkBoxUpdate" type="Bool">
       <attribute name="chkBoxUpdate" type="Bool"/>
       <default>true</default>
