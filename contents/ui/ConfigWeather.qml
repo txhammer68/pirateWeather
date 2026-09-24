@@ -125,6 +125,17 @@ Item {
                 id: apiNum
                 placeholderText: "Enter API Key"
                 placeholderTextColor:Kirigami.Theme.disabledTextColor
+                background: Rectangle {
+                    implicitWidth: 200
+                    implicitHeight: 24
+                    radius: 6
+                    color:"transparent"
+
+
+                    // Dynamically change border color based on focus
+                    border.color: apiNum.activeFocus ? Kirigami.Theme.hoverColor : Kirigami.Theme.disabledTextColor
+                    border.width: apiNum.activeFocus ? 2 : 1
+                }
             }
         }
 
@@ -191,6 +202,17 @@ Item {
                 id: latCode
                 placeholderText: "Enter Latitude Code"
                 placeholderTextColor:Kirigami.Theme.disabledTextColor
+                background: Rectangle {
+                    implicitWidth: 200
+                    implicitHeight: 24
+                    radius: 6
+                    color:"transparent"
+
+
+                    // Dynamically change border color based on focus
+                    border.color: latCode.activeFocus ? Kirigami.Theme.hoverColor : Kirigami.Theme.disabledTextColor
+                    border.width: latCode.activeFocus ? 2 : 1
+                }
             }
         }
         Row {
@@ -206,6 +228,17 @@ Item {
                 id: lonCode
                 placeholderText: "Enter Longtitude Code"
                 placeholderTextColor:Kirigami.Theme.disabledTextColor
+                background: Rectangle {
+                    implicitWidth: 200
+                    implicitHeight: 24
+                    radius: 6
+                    color:"transparent"
+
+
+                    // Dynamically change border color based on focus
+                    border.color: lonCode.activeFocus ? Kirigami.Theme.hoverColor : Kirigami.Theme.disabledTextColor
+                    border.width: lonCode.activeFocus ? 2 : 1
+                }
             }
         }
 
@@ -221,6 +254,17 @@ Item {
                 id:cityName
                 placeholderText: "Enter City Name"
                 placeholderTextColor:Kirigami.Theme.disabledTextColor
+                background: Rectangle {
+                    implicitWidth: 200
+                    implicitHeight: 24
+                    radius: 6
+                    color:"transparent"
+
+
+                    // Dynamically change border color based on focus
+                    border.color: cityName.activeFocus ? Kirigami.Theme.hoverColor : Kirigami.Theme.disabledTextColor
+                    border.width: cityName.activeFocus ? 2 : 1
+                }
             }
         }
 
@@ -236,6 +280,17 @@ Item {
                 id:regionName
                 placeholderText: "Enter Region Name"
                 placeholderTextColor:Kirigami.Theme.disabledTextColor
+                background: Rectangle {
+                    implicitWidth: 200
+                    implicitHeight: 24
+                    radius: 6
+                    color:"transparent"
+
+
+                    // Dynamically change border color based on focus
+                    border.color: regionName.activeFocus ? Kirigami.Theme.hoverColor : Kirigami.Theme.disabledTextColor
+                    border.width: regionName.activeFocus ? 2 : 1
+                }
             }
         }
 

@@ -30,7 +30,7 @@ import org.kde.plasma.plasmoid
      text:msgText +"\n \n" +
           "#### API URL: [" + plasmoid.configuration.api_url_base + "](" + plasmoid.configuration.api_url_base + ")\n" +
           "#### Version: "+ Plasmoid.metaData.version + "\n" +
-          "#### Error Msg: " + plasmoid.configuration.errorMsg + "\n" +
+          "#### Network Log: " + plasmoid.configuration.errorMsg + "\n" +
            "==========================================================="
     onLinkActivated: (link) => {
             Qt.openUrlExternally(link)

@@ -151,7 +151,7 @@ PlasmoidItem {
 
     function getData(url) {
         var xhr = new XMLHttpRequest();
-        var errorObject = null
+        var errorObject = undefined
         xhr.open("GET", url, true);
         // Set a timeout (5 seconds) so the widget doesn't hang on a dead connection
         xhr.timeout = 5000;
@@ -176,9 +176,9 @@ PlasmoidItem {
                         xhr.onreadystatechange = null;
                         xhr=null;
                     } finally {
-                        let errorDetail = errorObject ? " " + errorObject : "--";
-                        console.log(xhr.status, url, e);
-                        errorMsg=("Status Code: " + xhr.status + "\n #### Error Msg: " + errorDetail)
+                        let errorDetail = errorObject ? errorObject : "OK";
+                        console.log(xhr.status, url,errorDetail);
+                        errorMsg  = errorObject ?  errorMsg=("Failed to parse JSON data: " + "#### Status Code: "+ xhr.status +  "\n #### Error Msg: "+ errorDetail) : ("Status Code: " + xhr.status + "\n #### Error Msg: " + errorDetail)
                         xhr.onreadystatechange = null;
                         xhr=null;
                     }
